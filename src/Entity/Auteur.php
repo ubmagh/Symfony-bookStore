@@ -3,10 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\AuteurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 /**
  * @ORM\Entity(repositoryClass=AuteurRepository::class)
+ * @UniqueEntity(fields={"nom_prenom"}, message="This name exists already")
  */
 class Auteur
 {
@@ -18,24 +25,44 @@ class Auteur
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(name="nom_prenom", type="string", length=100, unique=true)
+     * @Assert\NotNull(message="Enter the fullname")
+     * @Assert\NotBlank(message="Enter the fullname")
      */
     private $nom_prenom;
 
     /**
      * @ORM\Column(type="string", length=1)
+     * @Assert\NotNull(message="Set the sex")
+     * @Assert\NotBlank(message="Set the sex")
+     * @Assert\Choice({"M", "F"}, message="Invalid sex")
      */
     private $sexe;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotNull(message="Set birthDate")
+     * @Assert\NotBlank(message="Set birthDate")
+     * @Assert\LessThan("-15 years", message="Invalid birthDate")
      */
     private $date_de_naissance;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotNull(message="Set nationality")
+     * @Assert\NotBlank(message="Set nationality")
      */
     private $nationalite;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Livre::class, inversedBy="auteurs")
+     */
+    private $livres;
+
+    public function __construct()
+    {
+        $this->livres = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +113,30 @@ class Auteur
     public function setNationalite(string $nationalite): self
     {
         $this->nationalite = $nationalite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Livre[]
+     */
+    public function getLivres(): Collection
+    {
+        return $this->livres;
+    }
+
+    public function addLivre(Livre $livre): self
+    {
+        if (!$this->livres->contains($livre)) {
+            $this->livres[] = $livre;
+        }
+
+        return $this;
+    }
+
+    public function removeLivre(Livre $livre): self
+    {
+        $this->livres->removeElement($livre);
 
         return $this;
     }

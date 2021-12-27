@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username","email"}, message=" The {{label}} entered exists already")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -20,7 +23,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column( name="email", type="string", length=180, unique=true)
+     * @Assert\Regex( pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", match=true, message="Invalid email adress")
      */
     private $email;
 
@@ -34,6 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column( name="username", type="string", length=50, unique=true)
+     * @Assert\Regex( pattern="/^[a-zA-Z0-9._]+$/", message="Invalid username, use alphanumerics _ and .", match=true )
+     */
+    private $username;
 
     public function getId(): ?int
     {
@@ -59,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -67,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -122,5 +132,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 }
