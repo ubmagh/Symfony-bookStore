@@ -1,0 +1,28 @@
+<header class="ui fixed inverted menu">
+    <div class="ui container">
+        <a href="{{ path("home") }}" class="header item">
+            <img class="logo logoImg" src="logo.png">
+            BookStore
+        </a>
+        <a href="{{ path("home") }}" class="item {{ app.request.get('_route') == 'home'? 'active':'' }}"> Home </a>
+        <a href="{{ path("auteur_index") }}" class="item {{ app.request.get('_route') == 'auteur_index'? 'active':'' }}"> Authors </a>
+        <a href="{{ path("livre_index") }}" class="item {{ app.request.get('_route') == 'livre_index'? 'active':'' }}"> Books </a>
+        <div class="right menu">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="ui dropdown item">
+                    <i class="user icon"></i> {{ app.user.username }}
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">Action</div>
+                        <div class="item">
+                            <a href="{{ path("app_logout") }}" class="item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ path("app_login") }}" class="item {{ app.request.get('_route') == 'app_login'? 'active':'' }}">Login</a>
+                <a href="{{ path("app_login") }}" class="item {{ app.request.get('_route') == 'app_login'? 'active':'' }}">Sign-up</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
