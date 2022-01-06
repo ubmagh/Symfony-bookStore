@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %}Symfony-BookStore{% endblock %}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -13,16 +15,17 @@
         {% endblock %}
         <script src="{{ asset("js/jquery-3.6.0.min.js") }}"></script>
         <script src="{{ asset("js/semantic.min.js") }}"></script>
-        {% block javascripts %}
-
+        {% block headScript %}
         {% endblock %}
     </head>
     <body>
         {% include('Parts/HeaderNav.html.twig') %}
-        <div class="ui main text container">
+        <div class="ui main container">
             {% block body %}
             {% endblock %}
         </div>
-        {% include('Parts/Footer.html.twig') %}
+        {#   {% include('Parts/Footer.html.twig') %} #}
+        <script> $(function(){$('.ui.menu .ui.dropdown').dropdown({on: 'hover'});$('.ui.menu a.item').on('click', function() {$(this).addClass('active').siblings().removeClass('active') ;});})() </script>
+        {% block bodyScript %}{% endblock %}
     </body>
 </html>

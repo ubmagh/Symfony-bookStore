@@ -24,7 +24,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column( name="email", type="string", length=180, unique=true)
-     * @Assert\Regex( pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", match=true, message="Invalid email adress")
+     * @Assert\Regex( pattern="/^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/i", match=true, message="Invalid email adress.")
+     * @Assert\Length( max=180, maxMessage="Invalid email adress, too long!")
+     * @Assert\NotNull(message="Email adresse is required.")
      */
     private $email;
 
@@ -41,7 +43,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column( name="username", type="string", length=50, unique=true)
-     * @Assert\Regex( pattern="/^[a-zA-Z0-9._]+$/", message="Invalid username, use alphanumerics _ and .", match=true )
+     * @Assert\Length( min=6, minMessage="The username is short, choose one that is more that 6 caracters.")
+     * @Assert\Regex( pattern="/^[a-z0-9._\-]+$/i", message="Invalid username, only alphanumerics and symbols (_,-,.) are allowed.", match=true )
      */
     private $username;
 
