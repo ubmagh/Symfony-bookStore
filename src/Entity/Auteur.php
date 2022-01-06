@@ -59,6 +59,11 @@ class Auteur
      */
     private $livres;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->livres = new ArrayCollection();
@@ -137,6 +142,18 @@ class Auteur
     public function removeLivre(Livre $livre): self
     {
         $this->livres->removeElement($livre);
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
