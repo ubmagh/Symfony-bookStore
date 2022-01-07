@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} BookStore | Log in!{% endblock %}
+{% block title %} BookStore | Login {% endblock %}
 
 {% block body %}
     <div class="ui middle aligned center aligned grid" style="margin-top: 5em;">
         <div class="sixteen column" >
             <form class="ui large form segment" method="post" style="padding: 2em 0.4em;">
-                <h1 class="ui teal image header">
+                <h1 class="ui teal image header" style="padding: 1.7em 1em;">
                     <div class="content">
                         Please sign in
                     </div>
                 </h1>
-                <div class="ui stacked " style="padding: 2.7em 2em;">
+                <div class="ui stacked" style="padding: 0.8em 2.8em; margin-top: 15px;">
                     <div class="field mb-1">
                         <div class="ui left icon input fluid">
                             <i class="user icon"></i>
@@ -29,14 +29,18 @@
                     >
                     <button type="submit" class="ui fluid large teal submit button">Login</button>
                 </div>
-                {% if error %}
-                    <div class="ui error message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% if error is not null %}
+                    <div class="ui error message Myred" style="display: block; margin: 0.5em 2em;">
+                        <li>
+                            {{ error.message }}
+                        </li>
+                    </div>
                 {% endif %}
 
             </form>
 
             <div class="ui message">
-                New to us? <a href="{{ path('app_register') }}">Sign Up</a>
+                New to us? <a href="{{ path('app_register') }}"> Sign Up </a>
             </div>
         </div>
     </div>

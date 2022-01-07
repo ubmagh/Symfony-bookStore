@@ -7,7 +7,7 @@
 {% block body %}
 
     <div class="ui segment center aligned">
-        <h1 class="ui header Huge center aligned" style="margin-top: 20px; margin-bottom: 40px;">Register</h1>
+        <h1 class="ui header center aligned teal" style="margin-top: 20px; margin-bottom: 40px;">Register</h1>
         {{ form_start(registrationForm, { 'attr':{'class':'ui form large grid container centered'} } ) }}
             <div class="field fourteen wide row {{ registrationForm.username.vars.errors|length>0 and registrationForm.username.vars.submitted	 ? "error" }}">
                 {{ form_label(registrationForm.username, 'Username', {
@@ -85,18 +85,14 @@
             </div>
 
             <div class="centered row fourteen wide">
-                <button type="submit" class="ui submit black basic button">Register</button>
+                <button type="submit" class="ui submit teal button">Register</button>
             </div>
 
         {{ form_end(registrationForm) }}
-
-        <div class="ui message center aligned">
-            Already registered? <a href="{{ path('app_login') }}">Sign in</a>
-        </div>
     </div>
-
-
-
+    <div class="ui message center aligned" style="text-align: center;">
+        Already registered? <a href="{{ path('app_login') }}"> Sign in </a>
+    </div>
 {% endblock %}
 
 

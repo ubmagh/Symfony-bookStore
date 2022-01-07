@@ -2,8 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\AccountDetailsType;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -25,6 +32,44 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+
+    /**
+     * @Route("/account", name="app_account")
+     */
+    public function accountDetails( UserRepository $userRepository, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager):Response{
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $status = null;
+
+        $user = $userRepository->loadUserByIdentifier( $this->getUser()->getUserIdentifier() )   ;
+
+
+        $form = $this->createForm(AccountDetailsType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            $user->setUsername( $form->get('username')->getData() )-> setEmail( $form->get('email')->getData() );
+            if( strlen( $form->get('plainPassword')->getData() ) >0 )
+                $userRepository->upgradePassword(
+                    $user,
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            else{
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+            $status = "updated";
+        }else{
+            $entityManager->refresh($user);
+        }
+        return $this->render('security/account.html.twig', [ 'status'=>$status, 'accountForm'=>$form->createView()]);
+    }
+
 
     /**
      * @Route("/logout", name="app_logout")
