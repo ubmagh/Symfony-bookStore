@@ -2,10 +2,112 @@
 
 {% block title %} BookStore | Home {% endblock %}
 
+{% block landing %}
+    <div class="ui grid center middle aligned" style="height: 100%;">
+        <div class="ui segment fourteen column wide ui items" style="padding-left: 3em; padding-right: 2em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div class="item">
+                <div class="image" style="width: 30em;">
+                    <img src="/img/books.png"  />
+                </div>
+                <div class="content middle aligned center centered">
+                    <h1 class="ui header centered center aligned">
+                        <a>
+                            Search for a book :
+                        </a>
+                    </h1>
+                    <div class="meta">
+                        <span>Search any book by title or by author.</span>
+                    </div>
+                    <div class="description">
+                        <form class="ui form massive" method="GET" action="{{ path('home') }}">
+                            <div class="field ui input sixteen wide">
+                                <input placeholder="search..." name="search" type="text"  />
+                            </div>
+                            <div class="ui row form large grid">
+                                <div class="ui column field eight wide large">
+                                    <label for="sdate"> Publishing date from : </label>
+                                    <input placeholder="Starting Date" name="sdate" min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" id="sdate" type="date"  />
+                                </div>
+                                <div class="ui column field eight wide large">
+                                    <label for="edate"> To : </label>
+                                    <input placeholder="Ending Date" name="edate"  min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" id="edate" type="date"  />
+                                </div>
+                            </div>
+                            <div class="ui row wide">
+                                <button type="submit" class="ui button big teal" style="margin: 0 auto; display: block;">
+                                    <i class="search link icon"> </i>
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block body %}
+    {% if submitted is same as (true) %}
+        <div class="ui segment fourteen column wide ui items" style="padding-left: 3em; padding-right: 2em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div class="item">
+                <div class="image" style="width: 15em;">
+                    <img src="/img/books.png"  />
+                </div>
+                <div class="content middle aligned center centered">
+                    <h1 class="ui header centered center aligned">
+                        <a>
+                            Search for a book :
+                        </a>
+                    </h1>
+                    <div class="meta">
+                        <span>Search any book by title or by author.</span>
+                    </div>
+                    <div class="description">
+                        <form class="ui form" method="GET" action="{{ path('home') }}" >
+                            <div class="field ui input sixteen wide">
+                                <input placeholder="search..." name="search" type="text" value="{{ search }}"  />
+                            </div>
+                            <div class="ui row form grid">
+                                <div class="ui column field eight wide large">
+                                    <label for="sdate"> Publishing date from : </label>
+                                    <input placeholder="Starting Date" name="sdate" min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" value="{{ sdate }}" id="sdate" type="date"  />
+                                </div>
+                                <div class="ui column field eight wide">
+                                    <label for="edate"> To : </label>
+                                    <input placeholder="Ending Date" name="edate"  min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" id="edate" type="date" value="{{ edate }}" />
+                                </div>
+                            </div>
+                            <div class="ui row wide">
+                                <button type="submit" class="ui button big teal" style="margin: 0 auto; display: block;">
+                                    <i class="search link icon"> </i>
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="example-wrapper">
+        <h1 class="header teal"> #TODO : Create some data To show search results </h1>
+        <small> -> Create fixtures </small>
+
+    {% else %}
+        {{ block('landing') }}
+    {% endif %}
+
+    {{ dump(submitted) }}
+{% endblock %}
 
 
-</div>
+{% block bodyScript %}
+    <script>
+        $(function(){
+            $('#sdate').on('change', (value)=>{
+                $('#edate').setAttribute('min', value);
+                console.log(value)
+            });
+        })();
+    </script>
 {% endblock %}
