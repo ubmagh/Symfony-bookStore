@@ -6,7 +6,6 @@ use App\Entity\Livre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @method Livre|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,14 +46,14 @@ class LivreRepository extends ServiceEntityRepository
         return $this->getEntityManager()->createQuery($Query)->setParameter('keyword', "%".$keyword."%")->setParameter('sdate', $sdate)->setParameter( 'edate', $edate);
     }
 
-    public function countAll():Integer{
+    public function countAll():int{
         $queryString = "
             SELECT count(l.id) as num
             FROM App\Entity\Livre l
         ";
 
         $query = $this->getEntityManager()->createQuery($queryString);
-        return (Integer) $query->getResult();
+        return (int) $query->getResult();
     }
 
     // /**

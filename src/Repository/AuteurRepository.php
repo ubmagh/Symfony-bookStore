@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Auteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @method Auteur|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,14 +19,14 @@ class AuteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Auteur::class);
     }
 
-    public function countAll():Integer{
+    public function countAll():int{
         $queryString = "
             SELECT count(a.id) as num
             FROM App\Entity\Auteur a
         ";
 
         $query = $this->getEntityManager()->createQuery($queryString);
-        return (Integer) $query->getResult();
+        return (int) $query->getResult();
     }
 
     // /**
