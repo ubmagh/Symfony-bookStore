@@ -28,11 +28,7 @@ class Livre
     /**
      * @ORM\Column(name="isbn", type="string", length=17, unique=true)
      * @Assert\NotBlank(message="Enter the ISBN13 key")
-     * @Assert\Regex(
-     *     pattern="/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/",
-     *     match=true,
-     *     message="Invalid ISBN13 key"
-     * )
+     * @Assert\Isbn( type="isbn13", isbn13Message="Invalid ISBN-13 key")
      */
     private $isbn;
 
