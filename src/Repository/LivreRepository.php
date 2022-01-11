@@ -53,7 +53,7 @@ class LivreRepository extends ServiceEntityRepository
         ";
 
         $query = $this->getEntityManager()->createQuery($queryString);
-        return (int) $query->getResult();
+        return (int) $query->getSingleScalarResult();
     }
 
     // /**
