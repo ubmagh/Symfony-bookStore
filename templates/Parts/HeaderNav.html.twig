@@ -1,7 +1,7 @@
 <header class="ui fixed inverted menu">
     <div class="ui container">
         <a href="{{ path("home") }}" class="header item">
-            <img class="logo logoImg" src="logo.png">
+            <img class="logo logoImg" src="{{ asset("logo.png") }}">
             BookStore
         </a>
         <a href="{{ path("home") }}" class="ui item {{ app.request.get('_route') == 'home'? 'active':'' }}"> Home </a>

@@ -1,18 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CpController!{% endblock %}
+{% block title %} BookStore | admin CP {% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello CP ✅</h1>
+    <div class="ui grid customClass w-100 two column" style="margin-top: 4.2em; margin-bottom: 4.7em;">
+        <div class="ui row wide">
+            <div class="ui column">
+                <a href="#manageBooks">
+                    <div class="ui segment violet inverted center aligned customClass py-3">
+                        <div style="width: 18em; padding: 1em 2.8em;" class="customClass mx-auto">
+                            <img src="{{ asset('img/book.png') }}" alt="book" width="100%">
+                        </div>
+                        <div>
+                            <h2 class="ui header huge center aligned" style="color: whitesmoke;">
+                                Manage books
+                            </h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="ui column">
+                <a href="#manageAuthors">
+                    <div class="ui segment orange inverted center aligned customClass py-3">
+                        <div style="width: 18em; padding: 1em 2.8em;" class="customClass mx-auto">
+                            <img src="{{ asset('img/writer.png') }}" alt="book" width="100%">
+                        </div>
+                        <div>
+                            <h2 class="ui header huge center aligned" style="color: whitesmoke;">
+                                Manage authors
+                            </h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="ui row wide">
+            <div class="ui column">
+                <a href="#manageGenres">
+                    <div class="ui segment brown inverted center aligned customClass py-3">
+                        <div style="width: 18em; padding: 1em 2.8em;" class="customClass mx-auto">
+                            <img src="{{ asset('img/category.png') }}" alt="book" width="100%">
+                        </div>
+                        <div>
+                            <h2 class="ui header huge center aligned" style="color: whitesmoke;">
+                                Manage genres
+                            </h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="ui column">
+                <a href="#manageUsers">
+                    <div class="ui segment olive inverted center aligned customClass py-3" >
+                        <div style="width: 18em; padding: 1em 2.8em;" class="customClass mx-auto">
+                            <img src="{{ asset('img/users.png') }}" alt="book" width="100%">
+                        </div>
+                        <div>
+                            <h2 class="ui header huge center aligned" style="color: whitesmoke;">
+                                Manage users
+                            </h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-    </ul>
-</div>
 {% endblock %}
