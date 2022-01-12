@@ -42,16 +42,16 @@ class SecurityController extends AbstractController
         $status = null;
 
         $user = $userRepository->loadUserByIdentifier( $this->getUser()->getUserIdentifier() )   ;
-
+        $oldUsername = $user->getUsername()."";
 
         $form = $this->createForm(AccountDetailsType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-            $user->setUsername( $form->get('username')->getData() )-> setEmail( $form->get('email')->getData() );
-            if( strlen( $form->get('plainPassword')->getData() ) >0 )
+            if (array_search('ROLE_ADMIN', $user->getRoles()) !==false ){
+                $user->setUsername($oldUsername);
+            }
+            if( strlen( $form->get('plainPassword')->getData() ) >0 ) {
                 $userRepository->upgradePassword(
                     $user,
                     $userPasswordHasher->hashPassword(
@@ -59,7 +59,7 @@ class SecurityController extends AbstractController
                         $form->get('plainPassword')->getData()
                     )
                 );
-            else{
+            }else{
                 $entityManager->persist($user);
                 $entityManager->flush();
             }

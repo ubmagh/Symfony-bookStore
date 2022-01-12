@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-use PHPUnit\Framework\Constraint\Callback;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +14,6 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Context\ExecutionContext;
 
 class AccountDetailsType extends AbstractType
 {

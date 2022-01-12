@@ -4,10 +4,14 @@
             <img class="logo logoImg" src="logo.png">
             BookStore
         </a>
-        <a href="{{ path("home") }}" class="item {{ app.request.get('_route') == 'home'? 'active':'' }}"> Home </a>
-        <a href="{{ path("auteur_index") }}" class="item {{ app.request.get('_route') == 'auteur_index'? 'active':'' }}"> Authors </a>
-        <a href="{{ path("livre_index") }}" class="item {{ app.request.get('_route') == 'livre_index'? 'active':'' }}"> Books </a>
+        <a href="{{ path("home") }}" class="ui item {{ app.request.get('_route') == 'home'? 'active':'' }}"> Home </a>
+        <a href="{{ path("auteur_index") }}" class="ui item {{ app.request.get('_route') == 'auteur_index'? 'active':'' }}"> Authors </a>
+        <a href="{{ path("livre_index") }}" class="ui item {{ app.request.get('_route') == 'livre_index'? 'active':'' }}"> Books </a>
+
         <div class="right ui inverted menu">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path("cp_index") }}" class="ui item right {{ app.request.get('_route') == 'cp_index'? 'active':'' }}"> <i class="icon key"></i> Admin panel </a>
+            {% endif %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <div class="ui dropdown item">
                     <i class="user icon"></i> {{ app.user.username }}

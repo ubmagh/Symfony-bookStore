@@ -17,7 +17,7 @@
                     <p> Your account has been updated successfully. </p>
                 </div>
             {% endif %}
-            <div class="field fourteen wide row {{ accountForm.username.vars.errors|length>0 and accountForm.username.vars.submitted	 ? "error" }}">
+            <div class="field fourteen wide row {{ is_granted('ROLE_ADMIN')? 'disabled':'' }} {{ accountForm.username.vars.errors|length>0 and accountForm.username.vars.submitted	 ? "error" }}">
                 {{ form_label(accountForm.username, 'Username', {
                     'label_attr': {'style': 'margin-right: auto;'}
                 }) }}
@@ -27,6 +27,9 @@
                         <i class="asterisk icon"></i>
                     </div>
                 </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <small class="meta"> As an administrator you can't change your username.</small>
+                {% endif %}
                 {% if accountForm.username.vars.errors|length>0 %}
                     <div class="ui text left aligned myred">
                         {{ form_errors(accountForm.username) }}
