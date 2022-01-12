@@ -25,10 +25,19 @@ body {
 .myred{
     color:red;
 }
-
+.customClass.mt-2{
+    margin-top: 2em;
+}
 .mb-1{
     margin-bottom: 1em;
 }
 .m-0{
     margin: 0;
+}
+.customClass.mx-auto{
+    margin-left: auto;
+    margin-right: auto;
+}
+.customClass.d-block{
+    display: block;
 }

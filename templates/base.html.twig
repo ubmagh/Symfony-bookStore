@@ -9,8 +9,8 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="stylesheet" href="{{ asset("css/semantic.min.css") }}" />
         <link rel="stylesheet" href="{{ asset("css/base.css") }}" />
+        <link rel="stylesheet" href="{{ asset("css/semantic.min.css") }}" />
         {% block stylesheets %}
         {% endblock %}
         <script src="{{ asset("js/jquery-3.6.0.min.js") }}"></script>
@@ -25,7 +25,9 @@
             {% endblock %}
         </div>
         {% include('Parts/Footer.html.twig') %}
-        <script> $(function(){$('.ui.menu .ui.dropdown').dropdown({on: 'hover'});$('.ui.menu a.item').on('click', function() {$(this).addClass('active').siblings().removeClass('active') ;});})() </script>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <script> $(function(){$('.ui.menu .ui.dropdown').dropdown({on: 'hover'});$('.ui.menu a.item').on('click', function() {$(this).addClass('active').siblings().removeClass('active') ;});}) </script>
+        {% endif %}
         {% block bodyScript %}{% endblock %}
     </body>
 </html>

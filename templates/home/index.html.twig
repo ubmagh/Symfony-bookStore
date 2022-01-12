@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="ui row wide">
-                                    <button type="submit" class="ui button big teal" style="margin: 0 auto; display: block;">
+                                    <button type="submit" class="ui button big teal" style=" margin-top: 2em; margin-left: auto; margin-right: auto; display: block;">
                                         <i class="search link icon"> </i>
                                         Search
                                     </button>
@@ -230,10 +230,12 @@
 {% block bodyScript %}
     <script>
         $(function(){
-            $('#sdate').on('change', (value)=>{
-                $('#edate').setAttribute('min', value);
-                console.log(value)
+            $('#sdate').on('change', (e)=>{
+                $('#edate').attr('min', e.target.value);
             });
-        })();
+            $('#edate').on('change', (e)=>{
+                $('#sdate').attr('max', e.target.value);
+            });
+        });
     </script>
 {% endblock %}
