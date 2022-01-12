@@ -41,22 +41,26 @@ class HomeController extends AbstractController
                 $request->query->getInt('page', 1), /*page number*/
                 10 /*limit per page*/
             );
+            $totalCount = $livres->getTotalItemCount();
         }else{
             $LivreRepo = $doctrine->getRepository( Livre::class );
             $AuteurRepo = $doctrine->getRepository( Auteur::class );
 
             $nbrBooks = $LivreRepo->countAll();
             $nbrAuthors = $AuteurRepo->countAll();
+            $totalCount=0;
         }
 
         return $this->render('home/index.html.twig', [
-            'livres' => $livres,
+            'books' => $livres,
+            'totalCount' => $totalCount,
             'search' => $search,
             'sdate' => $sdate,
             'edate' => $edate,
             'submitted' => $submitted,
             'nbrBooks' => $nbrBooks,
-            'nbrAuthors' => $nbrAuthors
+            'nbrAuthors' => $nbrAuthors,
+            'order'=> $request->get('order')
         ]);
     }
 

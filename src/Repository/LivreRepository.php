@@ -26,24 +26,35 @@ class LivreRepository extends ServiceEntityRepository
             SELECT l, a
             FROM App\Entity\Livre l
             INNER JOIN l.auteurs a ";
-
+        $parentheseOpen = false;
+        $isbnWithoutDashes = str_replace( '-', '', $keyword);
         if( $sdate != NULL ) {
             $Query .= "WHERE l.date_de_parution>=:sdate ";
             if( $edate != NULL )
                 $Query .= "AND l.date_de_parution<=:edate ";
-            $Query.= "AND ";
+            $Query.= "AND ( ";
+            $parentheseOpen = !0;
         }elseif ($edate != NULL){
             $Query .= "WHERE l.date_de_parution<=:edate ";
-            $Query.= "AND ";
+            $Query.= "AND ( ";
+            $parentheseOpen = !0;
         }else
             $Query .= "WHERE ";
         $Query .= "
              l.titre LIKE :keyword
+             OR l.isbn LIKE :keyword
+             OR l.isbn LIKE :isbn
             OR l.isbn LIKE :keyword
             OR a.nom_prenom LIKE :keyword
             ";
-
-        return $this->getEntityManager()->createQuery($Query)->setParameter('keyword', "%".$keyword."%")->setParameter('sdate', $sdate)->setParameter( 'edate', $edate);
+        if( $parentheseOpen )
+            $Query .= " ) ";
+        $query = $this->getEntityManager()->createQuery($Query)->setParameter('keyword', "%".$keyword."%")->setParameter("isbn", "%".$isbnWithoutDashes."%");
+        if( $sdate!=NULL)
+            $query->setParameter('sdate', $sdate);
+        if( $edate!=NULL)
+            $query->setParameter( 'edate', $edate);
+         return $query;
     }
 
     public function countAll():int{

@@ -24,7 +24,7 @@
             {% block body %}
             {% endblock %}
         </div>
-        {#   {% include('Parts/Footer.html.twig') %} #}
+        {% include('Parts/Footer.html.twig') %}
         <script> $(function(){$('.ui.menu .ui.dropdown').dropdown({on: 'hover'});$('.ui.menu a.item').on('click', function() {$(this).addClass('active').siblings().removeClass('active') ;});})() </script>
         {% block bodyScript %}{% endblock %}
     </body>

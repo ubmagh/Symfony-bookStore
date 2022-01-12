@@ -60,7 +60,7 @@ class AppFixtures extends Fixture
             $book = new Livre();
             $isbn =  $faker->isbn13();
             $book->setTitre( $faker->sentence(6, true) )
-                ->setImage( $faker->imageUrl(500,100, "book") )
+                ->setImage( $faker->imageUrl(500, 900, "book") )
                 ->setDateDeParution( $faker->dateTimeBetween('1900-01-01', '2021-12-12') )
                 ->setIsbn( $isbn )
                 ->setNote( $faker->numberBetween(0,20) )
