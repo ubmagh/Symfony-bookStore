@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AuteurRepository;
 use App\Repository\LivreRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +19,7 @@ class CpController extends AbstractController
     /**
      * @Route("/", name="cp_index")
      */
-    public function cp(): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         return $this->render('cp/index.html.twig');
@@ -27,7 +28,7 @@ class CpController extends AbstractController
     /**
      * @Route("/books", name="cp_livre_index", methods={"GET"})
      */
-    public function index( Request $request, LivreRepository $livreRepository, PaginatorInterface $paginator): Response
+    public function booksIndex( Request $request, LivreRepository $livreRepository, PaginatorInterface $paginator): Response
     {
         $search = trim(  $request->get('search','') ) ;
         $page = $request->query->getInt('page', 1);
@@ -47,6 +48,35 @@ class CpController extends AbstractController
         }
         return $this->render('livre/index.html.twig', [
             'books' => $books,
+            'search' => $search,
+            'order'=> $request->get('order'),
+            'currentPage'=> $page
+        ]);
+    }
+
+    /**
+     * @Route("/authors", name="cp_auteur_index", methods={"GET"})
+     */
+    public function authorsIndex(Request $request, AuteurRepository $auteurRepository, PaginatorInterface $paginator): Response
+    {
+        $search = trim(  $request->get('search','') ) ;
+        $page = $request->query->getInt('page', 1);
+        if( strlen( $search )>0 ){
+            $query = $auteurRepository->searchAuthorsLiteQuery($search);
+            $authors = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
+        } else{
+            $authors = $paginator->paginate(
+                $auteurRepository->findAllQuery(),
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
+        }
+        return $this->render('auteur/index.html.twig', [
+            'authors' => $authors,
             'search' => $search,
             'order'=> $request->get('order'),
             'currentPage'=> $page

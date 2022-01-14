@@ -37,7 +37,7 @@
         <table class="ui selectable striped customClass table center middle aligned">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th><strong> # </strong></th>
                     <th>{% if books.isSorted('l.isbn') %}
                         <u class="purple">
                             {{ knp_pagination_sortable(books, 'ISBN13', 'l.isbn') }}
@@ -86,7 +86,7 @@
             {% for livre in books %}
                 {% set i=1+i %}
                 <tr>
-                    <td>{{ (currentPage-1)*25+i }}</td>
+                    <td><strong> {{ (currentPage-1)*25+i }} </strong></td>
                     <td>{{ livre.isbn }}</td>
                     <td>{{ livre.titre }}</td>
                     <td>{{ livre.nombrePages }}</td>

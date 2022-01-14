@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Auteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,6 +28,22 @@ class AuteurRepository extends ServiceEntityRepository
 
         $query = $this->getEntityManager()->createQuery($queryString);
         return (int) $query->getSingleScalarResult();
+    }
+
+    public function searchAuthorsLiteQuery($keyword) : Query
+    {
+        return $this->getEntityManager()->createQuery("
+            SELECT a
+            FROM App\Entity\Auteur a
+            WHERE a.nom_prenom LIKE :keyword
+            OR a.sexe LIKE :keyword
+            OR a.date_de_naissance LIKE :keyword
+            OR a.nationalite LIKE :keyword
+            ")->setParameter('keyword', "%".$keyword."%");
+    }
+
+    public function findAllQuery( ) :Query {
+        return $this->getEntityManager()->createQuery("SELECT a FROM App\Entity\Auteur a");
     }
 
     // /**

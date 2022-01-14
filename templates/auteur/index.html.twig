@@ -1,41 +1,118 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Auteur index{% endblock %}
+{% block title %} BookStore | CP : Authors {% endblock %}
 
 {% block body %}
-    <h1>Auteur index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom_prenom</th>
-                <th>Sexe</th>
-                <th>Date_de_naissance</th>
-                <th>Nationalite</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for auteur in auteurs %}
-            <tr>
-                <td>{{ auteur.id }}</td>
-                <td>{{ auteur.nomPrenom }}</td>
-                <td>{{ auteur.sexe }}</td>
-                <td>{{ auteur.dateDeNaissance ? auteur.dateDeNaissance|date('Y-m-d') : '' }}</td>
-                <td>{{ auteur.nationalite }}</td>
-                <td>
-                    <a href="{{ path('auteur_show', {'id': auteur.id}) }}">show</a>
-                    <a href="{{ path('auteur_edit', {'id': auteur.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
+        <h5 class="ui header customClass pb-0">
+            <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
+        </h5>
+        <h1 class="ui header center aligned customClass pt-0 orange huge"> Authors management </h1>
+    </div>
 
-    <a href="{{ path('auteur_new') }}">Create new</a>
+    <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
+        <div class="ui grid three column">
+            <div class="ui column left floated">
+                <form action="{{ path('cp_auteur_index') }}" method="get">
+                    <div class="ui action input fluid">
+                        <input type="text" name="search" maxlength="50" value="{{ search }}" placeholder="Search with title, ISBN...">
+                        {% if search|length>0 %}
+                            <a href="{{ path('cp_auteur_index') }}" class="ui icon button negative">
+                                <i class="times icon"></i>
+                            </a>
+                        {% endif %}
+                        <button type="submit" class="ui icon button teal">
+                            <i class="search icon"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="column right floated customClass text-right">
+                <a href="{{ path('auteur_new') }}" class="ui button positive"> <i class="icon plus"></i> Create new </a>
+            </div>
+        </div>
+
+
+        <table class="ui selectable striped customClass table center middle aligned">
+            <thead>
+            <tr>
+                <th><strong> # </strong></th>
+                <th>
+                    {% if authors.isSorted('a.nom_prenom') %}
+                        <u class="purple">
+                            {{ knp_pagination_sortable(authors, 'Full name', 'a.nom_prenom') }}
+                        </u>
+                        <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                    {% else %}
+                        {{ knp_pagination_sortable(authors, 'Full name', 'a.nom_prenom') }}
+                    {% endif %}
+                </th>
+                <th>
+                    {% if authors.isSorted('a.sexe') %}
+                    <u class="purple">
+                        {{ knp_pagination_sortable(authors, 'Sexe', 'a.sexe') }}
+                    </u>
+                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                    {% else %}
+                        {{ knp_pagination_sortable(authors, 'Sexe', 'a.sexe') }}
+                    {% endif %}
+                </th>
+                <th>
+                    {% if authors.isSorted('a.date_de_naissance') %}
+                        <u class="purple">
+                            {{ knp_pagination_sortable(authors, 'Birth date', 'a.date_de_naissance') }}
+                        </u>
+                        <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                    {% else %}
+                        {{ knp_pagination_sortable(authors, 'Birth date', 'a.date_de_naissance') }}
+                    {% endif %}
+                </th>
+                <th>
+                    {% if authors.isSorted('a.nationalite') %}
+                    <u class="purple">
+                        {{ knp_pagination_sortable(authors, 'Nationality', 'a.nationalite') }}
+                    </u>
+                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                    {% else %}
+                        {{ knp_pagination_sortable(authors, 'Nationality', 'a.nationalite') }}
+                    {% endif %}
+                </th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set i=0 %}
+            {% for auteur in authors %}
+                {% set i=1+i %}
+                {% set gender = auteur.sexe is same as('M') ? 1:0 %}
+                <tr>
+                    <td> <strong> {{ (currentPage-1)*25+i }} </strong></td>
+                    <td>{{ auteur.nomPrenom }}</td>
+                    <td> <i class="{{ gender==1 ? 'mars blue':'venus pink' }} icon"></i> {{ gender==1 ? 'Male':'Female' }}  </td>
+                    <td>{{ auteur.dateDeNaissance ? auteur.dateDeNaissance|date('d/m/Y') : '' }}</td>
+                    <td> <i class="{{ auteur.nationalite|lower }} flag"> </i> {{ auteur.nationalite }}</td>
+                    <td>
+                        <a href="{{ path('auteur_show', {'id': auteur.id}) }}" title="view">
+                            <i class="icon eye teal"> </i>
+                        </a>
+                        <a href="{{ path('auteur_edit', {'id': auteur.id}) }}" title="Edit">
+                            <i class="pencil alternate icon olive"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if authors|length>0 %}
+        <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
+            {{ knp_pagination_render(authors) }}
+        </div>
+    {% endif %}
+
 {% endblock %}
