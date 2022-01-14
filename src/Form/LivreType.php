@@ -15,10 +15,10 @@ class LivreType extends AbstractType
             ->add('isbn')
             ->add('titre')
             ->add('nombre_pages')
-            ->add('date_de_parution')
+            //->add('dateDeParution')
             ->add('note')
-            ->add('auteurs')
-            ->add('genres')
+            //->add('auteurs')
+            //->add('genres')
         ;
     }
 

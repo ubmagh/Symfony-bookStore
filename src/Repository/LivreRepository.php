@@ -57,6 +57,10 @@ class LivreRepository extends ServiceEntityRepository
          return $query;
     }
 
+    public function findAllQuery( ) :Query {
+        return $this->getEntityManager()->createQuery("SELECT l FROM App\Entity\Livre l");
+    }
+
     public function countAll():int{
         $queryString = "
             SELECT count(l.id) as num

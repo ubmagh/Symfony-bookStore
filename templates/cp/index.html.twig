@@ -3,11 +3,10 @@
 {% block title %} BookStore | admin CP {% endblock %}
 
 {% block body %}
-
     <div class="ui grid customClass w-100 two column" style="margin-top: 4.2em; margin-bottom: 4.7em;">
         <div class="ui row wide">
             <div class="ui column">
-                <a href="#manageBooks">
+                <a href="{{ path('cp_livre_index') }}">
                     <div class="ui segment violet inverted center aligned customClass py-3">
                         <div style="width: 18em; padding: 1em 2.8em;" class="customClass mx-auto">
                             <img src="{{ asset('img/book.png') }}" alt="book" width="100%">
