@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1> Server Error ! </h1>
+    <div class="contentWrapper">
 
-    <p>
-        A server error has occured, try this operation later now try to <a href="{{ path('home') }}">return to the homepage</a>.
-    </p>
+        <h1> Server Error ! </h1>
+
+        <p>
+            A server error has occured, try this operation later now try to <a href="{{ path('home') }}">return to the homepage</a>.
+        </p>
+    </div>
 {% endblock %}

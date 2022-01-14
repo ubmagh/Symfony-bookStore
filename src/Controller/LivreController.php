@@ -11,13 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/books")
- */
 class LivreController extends AbstractController
 {
     /**
-     * @Route("/", name="livre_index", methods={"GET"})
+     * @Route("/books", name="livre_index", methods={"GET"})
      */
     public function index(LivreRepository $livreRepository): Response
     {
@@ -27,7 +24,7 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="livre_new", methods={"GET", "POST"})
+     * @Route("/cp/books/new", name="livre_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -39,7 +36,7 @@ class LivreController extends AbstractController
             $entityManager->persist($livre);
             $entityManager->flush();
 
-            return $this->redirectToRoute('livre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('cp_livre_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('livre/new.html.twig', [
@@ -49,7 +46,7 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="livre_show", methods={"GET"})
+     * @Route("/books/{id}", name="livre_show", methods={"GET"})
      */
     public function show(Livre $livre): Response
     {
@@ -59,7 +56,7 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="livre_edit", methods={"GET", "POST"})
+     * @Route("/cp/books/{id}/edit", name="livre_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Livre $livre, EntityManagerInterface $entityManager): Response
     {
@@ -69,7 +66,7 @@ class LivreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('livre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('cp_livre_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('livre/edit.html.twig', [
@@ -79,7 +76,7 @@ class LivreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="livre_delete", methods={"POST"})
+     * @Route("/cp/books/{id}", name="livre_delete", methods={"POST"})
      */
     public function delete(Request $request, Livre $livre, EntityManagerInterface $entityManager): Response
     {
@@ -88,6 +85,6 @@ class LivreController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('livre_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('cp_livre_index', [], Response::HTTP_SEE_OTHER);
     }
 }

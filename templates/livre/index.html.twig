@@ -3,116 +3,118 @@
 {% block title %} BookStore | CP : Books {% endblock %}
 
 {% block body %}
+    <div class="contentWrapper">
 
-    <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
-        <h5 class="ui header customClass pb-0">
-            <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
-        </h5>
-        <h1 class="ui header center aligned customClass pt-0 violet huge"> Books management </h1>
-    </div>
-
-    <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
-        <div class="ui grid three column">
-            <div class="ui column left floated">
-                <form action="{{ path('cp_livre_index') }}" method="get">
-                    <div class="ui action input fluid">
-                        <input type="text" name="search" maxlength="50" value="{{ search }}" placeholder="Search with title, ISBN...">
-                        {% if search|length>0 %}
-                            <a href="{{ path('cp_livre_index') }}" class="ui icon button negative">
-                                <i class="times icon"></i>
-                            </a>
-                        {% endif %}
-                        <button type="submit" class="ui icon button teal">
-                            <i class="search icon"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="column right floated customClass text-right">
-                <a href="{{ path('livre_new') }}" class="ui button positive"> <i class="icon plus"></i> Create new </a>
-            </div>
+        <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
+            <h5 class="ui header customClass pb-0">
+                <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
+            </h5>
+            <h1 class="ui header center aligned customClass pt-0 violet huge"> Books management </h1>
         </div>
 
+        <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div class="ui grid three column">
+                <div class="ui column left floated">
+                    <form action="{{ path('cp_livre_index') }}" method="get">
+                        <div class="ui action input fluid">
+                            <input type="text" name="search" maxlength="50" value="{{ search }}" placeholder="Search with title, ISBN...">
+                            {% if search|length>0 %}
+                                <a href="{{ path('cp_livre_index') }}" class="ui icon button negative">
+                                    <i class="times icon"></i>
+                                </a>
+                            {% endif %}
+                            <button type="submit" class="ui icon button teal">
+                                <i class="search icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="column right floated customClass text-right">
+                    <a href="{{ path('livre_new') }}" class="ui button positive"> <i class="icon plus"></i> Create new </a>
+                </div>
+            </div>
 
-        <table class="ui selectable striped customClass table center middle aligned">
-            <thead>
-                <tr>
-                    <th><strong> # </strong></th>
-                    <th>{% if books.isSorted('l.isbn') %}
-                        <u class="purple">
-                            {{ knp_pagination_sortable(books, 'ISBN13', 'l.isbn') }}
-                        </u>
-                        <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'ISBN13', 'l.isbn') }}
-                        {% endif %}
-                    </th>
-                    <th>Title</th>
-                    <th>
-                        {% if books.isSorted('l.nombre_pages') %}
-                        <u class="purple">
-                            {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
-                        </u>
-                        <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
-                        {% endif %}
-                    </th>
-                    <th>
-                        {% if books.isSorted('l.date_de_parution') %}
+
+            <table class="ui selectable striped customClass table center middle aligned">
+                <thead>
+                    <tr>
+                        <th><strong> # </strong></th>
+                        <th>{% if books.isSorted('l.isbn') %}
                             <u class="purple">
+                                {{ knp_pagination_sortable(books, 'ISBN13', 'l.isbn') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
+                                {{ knp_pagination_sortable(books, 'ISBN13', 'l.isbn') }}
+                            {% endif %}
+                        </th>
+                        <th>Title</th>
+                        <th>
+                            {% if books.isSorted('l.nombre_pages') %}
+                            <u class="purple">
+                                {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
+                                {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if books.isSorted('l.date_de_parution') %}
+                                <u class="purple">
+                                    {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
+                                </u>
+                                <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
                                 {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
-                            </u>
-                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
-                        {% endif %}
-                    </th>
-                    <th>
-                        {% if books.isSorted('l.note') %}
-                            <u class="purple">
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if books.isSorted('l.note') %}
+                                <u class="purple">
+                                    {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
+                                </u>
+                                <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
                                 {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
-                            </u>
-                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
-                        {% endif %}
-                    </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% set i=0 %}
-            {% for livre in books %}
-                {% set i=1+i %}
-                <tr>
-                    <td><strong> {{ (currentPage-1)*25+i }} </strong></td>
-                    <td>{{ livre.isbn }}</td>
-                    <td>{{ livre.titre }}</td>
-                    <td>{{ livre.nombrePages }}</td>
-                    <td>{{ livre.dateDeParution ? livre.dateDeParution|date('Y-m-d') : '' }}</td>
-                    <td>{{ livre.note }}</td>
-                    <td>
-                        <a href="{{ path('livre_show', {'id': livre.id}) }}" title="view">
-                            <i class="icon eye teal"> </i>
-                        </a>
-                        <a href="{{ path('livre_edit', {'id': livre.id}) }}" title="Edit">
-                            <i class="pencil alternate icon olive"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% if books|length>0 %}
-        <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
-            {{ knp_pagination_render(books) }}
+                            {% endif %}
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set i=0 %}
+                {% for livre in books %}
+                    {% set i=1+i %}
+                    <tr>
+                        <td><strong> {{ (currentPage-1)*25+i }} </strong></td>
+                        <td>{{ livre.isbn }}</td>
+                        <td>{{ livre.titre }}</td>
+                        <td>{{ livre.nombrePages }}</td>
+                        <td>{{ livre.dateDeParution ? livre.dateDeParution|date('Y-m-d') : '' }}</td>
+                        <td>{{ livre.note }}</td>
+                        <td>
+                            <a href="{{ path('livre_show', {'id': livre.id}) }}" title="view">
+                                <i class="icon eye teal"> </i>
+                            </a>
+                            <a href="{{ path('livre_edit', {'id': livre.id}) }}" title="Edit">
+                                <i class="pencil alternate icon olive"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-    {% endif %}
+        {% if books|length>0 %}
+            <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
+                {{ knp_pagination_render(books) }}
+            </div>
+        {% endif %}
 
+    </div>
 {% endblock %}

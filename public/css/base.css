@@ -72,3 +72,6 @@ body {
 .table.customClass tr{
     text-align: center;
 }
+.contentWrapper{
+    min-height: 100vh;
+}

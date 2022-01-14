@@ -84,145 +84,149 @@
 {% endblock %}
 
 {% block body %}
-    {% if submitted is same as (true) %}
-        <div class="ui segment fourteen column wide ui items" style="padding: 0.7em 2em 0.7em 3em; border: 1px solid gray; background-color: #fffffdc7;">
-            <div class="item">
-                <div class="image" style="width: 15em;">
-                    <img src="/img/books.png"  />
-                </div>
-                <div class="content middle aligned center centered">
-                    <h1 class="ui header center aligned medium" style="display: block;">
-                        Search for a book :
-                    </h1>
-                    <div class="meta">
-                        <span>Search any book by title, ISBN-13, or by author.</span>
+    <div class="contentWrapper">
+
+        {% if submitted is same as (true) %}
+            <div class="ui segment fourteen column wide ui items" style="padding: 0.7em 2em 0.7em 3em; border: 1px solid gray; background-color: #fffffdc7;">
+                <div class="item">
+                    <div class="image" style="width: 15em;">
+                        <img src="/img/books.png"  />
                     </div>
-                    <div class="description">
-                        <form class="ui form" method="GET" action="{{ path('home') }}" >
-                            <div class="field ui input sixteen wide">
-                                <input placeholder="search..." name="search" type="text" value="{{ search }}" maxlength="50" />
-                            </div>
-                            <div class="ui row form grid">
-                                <div class="ui column field eight wide large">
-                                    <label for="sdate"> Publishing date from : </label>
-                                    <input placeholder="Starting Date" name="sdate" min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" value="{{ sdate }}" id="sdate" type="date"  />
+                    <div class="content middle aligned center centered">
+                        <h1 class="ui header center aligned medium" style="display: block;">
+                            Search for a book :
+                        </h1>
+                        <div class="meta">
+                            <span>Search any book by title, ISBN-13, or by author.</span>
+                        </div>
+                        <div class="description">
+                            <form class="ui form" method="GET" action="{{ path('home') }}" >
+                                <div class="field ui input sixteen wide">
+                                    <input placeholder="search..." name="search" type="text" value="{{ search }}" maxlength="50" />
                                 </div>
-                                <div class="ui column field eight wide">
-                                    <label for="edate"> To : </label>
-                                    <input placeholder="Ending Date" name="edate"  min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" id="edate" type="date" value="{{ edate }}" />
+                                <div class="ui row form grid">
+                                    <div class="ui column field eight wide large">
+                                        <label for="sdate"> Publishing date from : </label>
+                                        <input placeholder="Starting Date" name="sdate" min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" value="{{ sdate }}" id="sdate" type="date"  />
+                                    </div>
+                                    <div class="ui column field eight wide">
+                                        <label for="edate"> To : </label>
+                                        <input placeholder="Ending Date" name="edate"  min="1900-01-01" max="{{ date('today')|date('Y-m-d') }}" id="edate" type="date" value="{{ edate }}" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="ui row wide" style="text-align: center;">
-                                <button type="submit" class="ui button medium teal" style="margin: 0 auto; display: inline-block;">
-                                    <i class="search link icon"> </i>
-                                    Search
-                                </button>
-                                <a class="ui button medium instagram" style="margin: 0 auto; display: inline-block;" href="{{ path('livre_index') }}">
-                                    <i class="searchengin icon"> </i>
-                                    Advanced search
-                                </a>
-                            </div>
-                        </form>
+                                <div class="ui row wide" style="text-align: center;">
+                                    <button type="submit" class="ui button medium teal" style="margin: 0 auto; display: inline-block;">
+                                        <i class="search link icon"> </i>
+                                        Search
+                                    </button>
+                                    <a class="ui button medium instagram" style="margin: 0 auto; display: inline-block;" href="{{ path('livre_index') }}">
+                                        <i class="searchengin icon"> </i>
+                                        Advanced search
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% if books|length>0 %}
-            <div class="ui segment column wide" style=" margin: 0.2em auto !important; border: 1px solid gray; background-color: #fffffdc7;">
-                <h4 class="ui header four column grid centered m-0">
-                    <div class="ui column center aligned">
-                        <strong> Sorting by : </strong>
-                    </div>
-                    <div class="ui column center aligned">
-                        {% if books.isSorted('l.note') %}
-                            <u class="purple">
+            {% if books|length>0 %}
+                <div class="ui segment column wide" style=" margin: 0.2em auto !important; border: 1px solid gray; background-color: #fffffdc7;">
+                    <h4 class="ui header four column grid centered m-0">
+                        <div class="ui column center aligned">
+                            <strong> Sorting by : </strong>
+                        </div>
+                        <div class="ui column center aligned">
+                            {% if books.isSorted('l.note') %}
+                                <u class="purple">
+                                    {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
+                                </u>
+                                <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
                                 {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
-                            </u>
-                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
-                        {% endif %}
-                    </div>
-                    <div class="ui column center aligned">
-                        {% if books.isSorted('l.date_de_parution') %}
-                            <u class="purple">
+                            {% endif %}
+                        </div>
+                        <div class="ui column center aligned">
+                            {% if books.isSorted('l.date_de_parution') %}
+                                <u class="purple">
+                                    {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
+                                </u>
+                                <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
                                 {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
-                            </u>
-                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
-                        {% else %}
-                            {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
-                        {% endif %}
-                    </div>
-                </h4>
-            </div>
-        {% endif %}
-
-        <div class="ui segment fourteen column wide items" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
-            <div class="ui items" style="padding: 2em 3em;">
-                <h4 class="ui header center aligned" style="margin-bottom: 15px;"> <u> <pre> {{ totalCount }} results found </pre> </u> </h4>
-                {% for book in books %}
-                    <div class="item" style=" padding-left: 5em; {{ loop.last? '':'margin-bottom: 2em !important;'  }}" >
-                        <div class="image medium" style="height: 180px; width: 140px !important;" >
-                            <a href="{{ path('livre_show', {id:book.id}) }}">
-                                <img src="{{ book.image }}" width="100%" height="100%" />
-                            </a>
+                            {% endif %}
                         </div>
-                        <div class="content grid middle aligned" style="padding: 0.7em 1em;">
-                            <h1 class="ui header">
+                    </h4>
+                </div>
+            {% endif %}
+
+            <div class="ui segment fourteen column wide items" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
+                <div class="ui items" style="padding: 2em 3em;">
+                    <h4 class="ui header center aligned" style="margin-bottom: 15px;"> <u> <pre> {{ totalCount }} results found </pre> </u> </h4>
+                    {% for book in books %}
+                        <div class="item" style=" padding-left: 5em; {{ loop.last? '':'margin-bottom: 2em !important;'  }}" >
+                            <div class="image medium" style="height: 180px; width: 140px !important;" >
                                 <a href="{{ path('livre_show', {id:book.id}) }}">
-                                {{ book.titre }}
-                                </a>
-                            </h1>
-                            <div class="text" style="margin-top: 0.7em; margin-left: 6px;">
-                                <div>
-                                    <strong>Genres: </strong>
-                                    {% set genres=[] %}
-                                    {% for genre in book.genres %}
-                                        {% set genres= genres|merge([genre.nom]) %}
-                                    {% endfor %}
-                                    {{ genres|join(', ') }}.
-                                </div>
-                                <div>
-                                    <strong> Publishing date : </strong> {{ book.dateDeParution|date("d/m/Y") }}.
-                                </div>
-                                <div style="margin-top: 1em;">
-                                    <h6 class="ui header center aligned large brown">
-                                        <small style="margin-right: 8px;">Rating:</small>  <strong>{{ book.note }}</strong> / 20
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="ui header small extra right aligned">
-                                <a href="{{ path('livre_show', {id:book.id}) }}">
-                                    More
-                                    <i class="icon arrow circle right"></i>
+                                    <img src="{{ book.image }}" width="100%" height="100%" />
                                 </a>
                             </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="ui icon message huge yellow" style="margin: 4em auto;">
-                        <i class="times circle outline icon"></i>
-                        <div class="content">
-                            <div class="header">
-                                Sorry, we couldn't find anything.
+                            <div class="content grid middle aligned" style="padding: 0.7em 1em;">
+                                <h1 class="ui header">
+                                    <a href="{{ path('livre_show', {id:book.id}) }}">
+                                    {{ book.titre }}
+                                    </a>
+                                </h1>
+                                <div class="text" style="margin-top: 0.7em; margin-left: 6px;">
+                                    <div>
+                                        <strong>Genres: </strong>
+                                        {% set genres=[] %}
+                                        {% for genre in book.genres %}
+                                            {% set genres= genres|merge([genre.nom]) %}
+                                        {% endfor %}
+                                        {{ genres|join(', ') }}.
+                                    </div>
+                                    <div>
+                                        <strong> Publishing date : </strong> {{ book.dateDeParution|date("d/m/Y") }}.
+                                    </div>
+                                    <div style="margin-top: 1em;">
+                                        <h6 class="ui header center aligned large brown">
+                                            <small style="margin-right: 8px;">Rating:</small>  <strong>{{ book.note }}</strong> / 20
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="ui header small extra right aligned">
+                                    <a href="{{ path('livre_show', {id:book.id}) }}">
+                                        More
+                                        <i class="icon arrow circle right"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <p> Try using less and specific keywords, or try making an <a href="{{ path('livre_index') }}"> advanced search. </a> </p>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% else %}
+                        <div class="ui icon message huge yellow" style="margin: 4em auto;">
+                            <i class="times circle outline icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    Sorry, we couldn't find anything.
+                                </div>
+                                <p> Try using less and specific keywords, or try making an <a href="{{ path('livre_index') }}"> advanced search. </a> </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
 
-        {% if books|length>0 %}
-            <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
-                {{ knp_pagination_render(books) }}
-            </div>
+            {% if books|length>0 %}
+                <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
+                    {{ knp_pagination_render(books) }}
+                </div>
+            {% endif %}
+
+        {% else %}
+            {{ block('landing') }}
         {% endif %}
 
-    {% else %}
-        {{ block('landing') }}
-    {% endif %}
+    </div>
 
 {% endblock %}
 

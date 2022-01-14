@@ -3,114 +3,112 @@
 {% block title %} BookStore | My account details {% endblock %}
 
 {% block body %}
-    {{ form_start(accountForm) }}
+    <div class="contentWrapper">
+        {{ form_start(accountForm) }}
+        <div class="ui segment center aligned">
+            <h1 class="ui header center aligned teal" style="margin-top: 20px; margin-bottom: 40px;">Account Details :</h1>
+            <div class="ui form large grid container centered">
+                {% if status is same as ("updated")  %}
+                    <div class="ui positive message column ten wide">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Success
+                        </div>
+                        <p> Your account has been updated successfully. </p>
+                    </div>
+                {% endif %}
+                <div class="field fourteen wide row {{ is_granted('ROLE_ADMIN')? 'disabled':'' }} {{ accountForm.username.vars.errors|length>0 and accountForm.username.vars.submitted	 ? "error" }}">
+                    {{ form_label(accountForm.username, 'Username', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(accountForm.username ) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <small class="meta"> As an administrator you can't change your username.</small>
+                    {% endif %}
+                    {% if accountForm.username.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(accountForm.username) }}
+                        </div>
+                    {% endif %}
+                </div>
 
-    <div class="ui segment center aligned">
-        <h1 class="ui header center aligned teal" style="margin-top: 20px; margin-bottom: 40px;">Account Details :</h1>
-        <div class="ui form large grid container centered">
-            {% if status is same as ("updated")  %}
-                <div class="ui positive message column ten wide">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Success
+                <div class="field fourteen wide row {{ accountForm.email.vars.errors|length>0 and accountForm.email.vars.submitted	 ? "error" }}">
+                    {{ form_label(accountForm.email, 'Email', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(accountForm.email) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
                     </div>
-                    <p> Your account has been updated successfully. </p>
+                    {% if accountForm.email.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(accountForm.email) }}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
-            <div class="field fourteen wide row {{ is_granted('ROLE_ADMIN')? 'disabled':'' }} {{ accountForm.username.vars.errors|length>0 and accountForm.username.vars.submitted	 ? "error" }}">
-                {{ form_label(accountForm.username, 'Username', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(accountForm.username ) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
-                    </div>
-                </div>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <small class="meta"> As an administrator you can't change your username.</small>
-                {% endif %}
-                {% if accountForm.username.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(accountForm.username) }}
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="field fourteen wide row {{ accountForm.email.vars.errors|length>0 and accountForm.email.vars.submitted	 ? "error" }}">
-                {{ form_label(accountForm.email, 'Email', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(accountForm.email) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
+                <div class="field fourteen wide row {{ accountForm.plainPassword.first.vars.errors|length>0 and accountForm.plainPassword.first.vars.submitted	 ? "error" }}">
+                    {{ form_label(accountForm.plainPassword.first, 'Password', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui input fluid">
+                        {{ form_widget(accountForm.plainPassword.first) }}
                     </div>
+                    {% if accountForm.plainPassword.first.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(accountForm.plainPassword.first) }}
+                        </div>
+                    {% endif %}
                 </div>
-                {% if accountForm.email.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(accountForm.email) }}
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="field fourteen wide row {{ accountForm.plainPassword.first.vars.errors|length>0 and accountForm.plainPassword.first.vars.submitted	 ? "error" }}">
-                {{ form_label(accountForm.plainPassword.first, 'Password', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui input fluid">
-                    {{ form_widget(accountForm.plainPassword.first) }}
+                <div class="field fourteen wide row {{ accountForm.plainPassword.second.vars.errors|length>0 and accountForm.plainPassword.second.vars.submitted	 ? "error" }}">
+                    {{ form_label(accountForm.plainPassword.second, 'Confirm password', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui input fluid">
+                        {{ form_widget(accountForm.plainPassword.second) }}
+                    </div>
+                    {% if accountForm.plainPassword.second.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(accountForm.plainPassword.second) }}
+                        </div>
+                    {% endif %}
                 </div>
-                {% if accountForm.plainPassword.first.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(accountForm.plainPassword.first) }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="field fourteen wide row {{ accountForm.plainPassword.second.vars.errors|length>0 and accountForm.plainPassword.second.vars.submitted	 ? "error" }}">
-                {{ form_label(accountForm.plainPassword.second, 'Confirm password', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui input fluid">
-                    {{ form_widget(accountForm.plainPassword.second) }}
-                </div>
-                {% if accountForm.plainPassword.second.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(accountForm.plainPassword.second) }}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="ui form message center aligned grid" style="text-align: center; padding: 0;">
-        <div class="centered ui grid row middle aligned">
-            <div class="column field ten wide ui {{ accountForm.password.vars.errors|length>0 and accountForm.password.vars.submitted	 ? "error" }} ">
-                {{ form_label(accountForm.password, 'Current password', {
-                    'label_attr': {'style': 'margin-right: auto; display: block; text-align: left;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(accountForm.password) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
-                    </div>
-                </div>
-                <small> Current password is required to save any changes. </small>
-                {% if accountForm.password.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(accountForm.password) }}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="ui column four wide center aligned">
-                <button type="submit" class="ui submit teal button"> Save </button>
             </div>
         </div>
+        <div class="ui form message center aligned grid" style="text-align: center; padding: 0;">
+            <div class="centered ui grid row middle aligned">
+                <div class="column field ten wide ui {{ accountForm.password.vars.errors|length>0 and accountForm.password.vars.submitted	 ? "error" }} ">
+                    {{ form_label(accountForm.password, 'Current password', {
+                        'label_attr': {'style': 'margin-right: auto; display: block; text-align: left;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(accountForm.password) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    <small> Current password is required to save any changes. </small>
+                    {% if accountForm.password.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(accountForm.password) }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="ui column four wide center aligned">
+                    <button type="submit" class="ui submit teal button"> Save </button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(accountForm) }}
     </div>
-
-    {{ form_end(accountForm) }}
-
-
 {% endblock %}
 
 {% block bodyScript %}

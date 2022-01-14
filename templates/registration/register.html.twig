@@ -5,93 +5,94 @@
 
 
 {% block body %}
+    <div class="contentWrapper">
+        <div class="ui segment center aligned">
+            <h1 class="ui header center aligned teal" style="margin-top: 20px; margin-bottom: 40px;">Register</h1>
+            {{ form_start(registrationForm, { 'attr':{'class':'ui form large grid container centered'} } ) }}
+                <div class="field fourteen wide row {{ registrationForm.username.vars.errors|length>0 and registrationForm.username.vars.submitted	 ? "error" }}">
+                    {{ form_label(registrationForm.username, 'Username', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(registrationForm.username ) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    {% if registrationForm.username.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(registrationForm.username) }}
+                        </div>
+                    {% endif %}
+                </div>
 
-    <div class="ui segment center aligned">
-        <h1 class="ui header center aligned teal" style="margin-top: 20px; margin-bottom: 40px;">Register</h1>
-        {{ form_start(registrationForm, { 'attr':{'class':'ui form large grid container centered'} } ) }}
-            <div class="field fourteen wide row {{ registrationForm.username.vars.errors|length>0 and registrationForm.username.vars.submitted	 ? "error" }}">
-                {{ form_label(registrationForm.username, 'Username', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(registrationForm.username ) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
+                <div class="field fourteen wide row {{ registrationForm.email.vars.errors|length>0 and registrationForm.email.vars.submitted	 ? "error" }}">
+                    {{ form_label(registrationForm.email, 'Email', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(registrationForm.email) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    {% if registrationForm.email.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(registrationForm.email) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field fourteen wide row {{ registrationForm.plainPassword.first.vars.errors|length>0 and registrationForm.plainPassword.first.vars.submitted	 ? "error" }}">
+                    {{ form_label(registrationForm.plainPassword.first, 'Password', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(registrationForm.plainPassword.first) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    {% if registrationForm.plainPassword.first.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(registrationForm.plainPassword.first) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field fourteen wide row {{ registrationForm.plainPassword.second.vars.errors|length>0 and registrationForm.plainPassword.second.vars.submitted	 ? "error" }}">
+                    {{ form_label(registrationForm.plainPassword.second, 'Confirm password', {
+                        'label_attr': {'style': 'margin-right: auto;'}
+                    }) }}
+                    <div class="ui corner labeled input fluid">
+                        {{ form_widget(registrationForm.plainPassword.second) }}
+                        <div class="ui corner label red">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    {% if registrationForm.plainPassword.second.vars.errors|length>0 %}
+                        <div class="ui text left aligned myred">
+                            {{ form_errors(registrationForm.plainPassword.second) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="ui field centered fourteen wide row {{ registrationForm.agreeTerms.vars.errors|length>0 and registrationForm.agreeTerms.vars.submitted	 ? "error" }}">
+                    <div class="ui checkbox centered">
+                        {{ form_label(registrationForm.agreeTerms) }}
+                        {{ form_widget(registrationForm.agreeTerms ) }}
                     </div>
                 </div>
-                {% if registrationForm.username.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(registrationForm.username) }}
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="field fourteen wide row {{ registrationForm.email.vars.errors|length>0 and registrationForm.email.vars.submitted	 ? "error" }}">
-                {{ form_label(registrationForm.email, 'Email', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(registrationForm.email) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
-                    </div>
+                <div class="centered row fourteen wide">
+                    <button type="submit" class="ui submit teal button">Register</button>
                 </div>
-                {% if registrationForm.email.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(registrationForm.email) }}
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="field fourteen wide row {{ registrationForm.plainPassword.first.vars.errors|length>0 and registrationForm.plainPassword.first.vars.submitted	 ? "error" }}">
-                {{ form_label(registrationForm.plainPassword.first, 'Password', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(registrationForm.plainPassword.first) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
-                    </div>
-                </div>
-                {% if registrationForm.plainPassword.first.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(registrationForm.plainPassword.first) }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="field fourteen wide row {{ registrationForm.plainPassword.second.vars.errors|length>0 and registrationForm.plainPassword.second.vars.submitted	 ? "error" }}">
-                {{ form_label(registrationForm.plainPassword.second, 'Confirm password', {
-                    'label_attr': {'style': 'margin-right: auto;'}
-                }) }}
-                <div class="ui corner labeled input fluid">
-                    {{ form_widget(registrationForm.plainPassword.second) }}
-                    <div class="ui corner label red">
-                        <i class="asterisk icon"></i>
-                    </div>
-                </div>
-                {% if registrationForm.plainPassword.second.vars.errors|length>0 %}
-                    <div class="ui text left aligned myred">
-                        {{ form_errors(registrationForm.plainPassword.second) }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="ui field centered fourteen wide row {{ registrationForm.agreeTerms.vars.errors|length>0 and registrationForm.agreeTerms.vars.submitted	 ? "error" }}">
-                <div class="ui checkbox centered">
-                    {{ form_label(registrationForm.agreeTerms) }}
-                    {{ form_widget(registrationForm.agreeTerms ) }}
-                </div>
-            </div>
-
-            <div class="centered row fourteen wide">
-                <button type="submit" class="ui submit teal button">Register</button>
-            </div>
-
-        {{ form_end(registrationForm) }}
-    </div>
-    <div class="ui message center aligned" style="text-align: center;">
-        Already registered? <a href="{{ path('app_login') }}"> Sign in </a>
+            {{ form_end(registrationForm) }}
+        </div>
+        <div class="ui message center aligned" style="text-align: center;">
+            Already registered? <a href="{{ path('app_login') }}"> Sign in </a>
+        </div>
     </div>
 {% endblock %}
 
