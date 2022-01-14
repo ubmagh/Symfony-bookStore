@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,19 @@ class GenreRepository extends ServiceEntityRepository
         parent::__construct($registry, Genre::class);
     }
 
+
+    public function searchGenresLiteQuery($keyword) : Query
+    {
+        return $this->getEntityManager()->createQuery("
+            SELECT g
+            FROM App\Entity\Genre g
+            WHERE g.nom LIKE :keyword
+            ")->setParameter('keyword', "%".$keyword."%");
+    }
+
+    public function findAllQuery( ) :Query {
+        return $this->getEntityManager()->createQuery("SELECT g FROM App\Entity\Genre g");
+    }
     // /**
     //  * @return Genre[] Returns an array of Genre objects
     //  */

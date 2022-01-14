@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\AuteurRepository;
+use App\Repository\GenreRepository;
 use App\Repository\LivreRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,6 +78,35 @@ class CpController extends AbstractController
         }
         return $this->render('auteur/index.html.twig', [
             'authors' => $authors,
+            'search' => $search,
+            'order'=> $request->get('order'),
+            'currentPage'=> $page
+        ]);
+    }
+
+    /**
+     * @Route("/genres", name="cp_genre_index", methods={"GET"})
+     */
+    public function genresIndex(Request $request, GenreRepository $genreRepository, PaginatorInterface $paginator): Response
+    {
+        $search = trim(  $request->get('search','') ) ;
+        $page = $request->query->getInt('page', 1);
+        if( strlen( $search )>0 ){
+            $query = $genreRepository->searchGenresLiteQuery($search);
+            $genres = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
+        } else{
+            $genres = $paginator->paginate(
+                $genreRepository->findAllQuery(),
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
+        }
+        return $this->render('genre/index.html.twig', [
+            'genres' => $genres,
             'search' => $search,
             'order'=> $request->get('order'),
             'currentPage'=> $page

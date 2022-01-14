@@ -16,7 +16,7 @@
             <div class="ui column left floated">
                 <form action="{{ path('cp_auteur_index') }}" method="get">
                     <div class="ui action input fluid">
-                        <input type="text" name="search" maxlength="50" value="{{ search }}" placeholder="Search with title, ISBN...">
+                        <input type="text" name="search" maxlength="50" value="{{ search }}" placeholder="Search with fullName, nationality...">
                         {% if search|length>0 %}
                             <a href="{{ path('cp_auteur_index') }}" class="ui icon button negative">
                                 <i class="times icon"></i>
