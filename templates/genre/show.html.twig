@@ -1,26 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Genre{% endblock %}
+{% block title %}  BookStore | Genre : {{ genre.nom }} {% endblock %}
 
 {% block body %}
-    <h1>Genre</h1>
+    <div class="contentWrapper" style="padding: 1em">
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("genre_index") }}"> <i class="icon left arrow" ></i> Go Back to genres list  </a>
+                </h5>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div>
+                        <a href="{{ path('genre_edit', {'id': genre.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> Edit </a>
+                        {{ include('genre/_delete_form.html.twig') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div class="ui items">
+                <div class="item" style="width: fit-content; margin: 0 auto;">
+                    <div class="image">
+                        <img src="{{ asset("/img/category.png") }}">
+                    </div>
+                    <div class="content" style="flex-direction: column;display: flex;justify-content: center;">
+                        <a class="header big "> {{ genre.nom }} </a>
+                        <div class="meta">
+                            <span> contain {{ genre.livres|length }} Books </span>
+                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="extra right floated brown">
+                                Genre created in : {{ genre.createdAt|date('d/m/Y') }} , and editted last time in {{ genre.updatedAt|date('d/m/Y') }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ genre.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ genre.nom }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="ui segment sixteen attached column wide items" style="padding: 1em; border: 1px solid gray;">
+            <h3 class="ui header center aligned"> Genre books :  </h3>
+        </div>
+        <div class="ui segment sixteen attached column wide items" style="padding: 0em; border: 1px solid gray;">
+            <table class="ui table striped customClass">
+                <thead>
+                    <tr>
+                        <th> <strong> # </strong> </th>
+                        <th>
+                            {% if books.isSorted('l.titre') %}
+                                <u class="purple">
+                                    {{ knp_pagination_sortable(books, 'Title', 'l.titre') }}
+                                </u>
+                                <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
+                                {{ knp_pagination_sortable(books, ' Title', 'l.titre') }}
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if books.isSorted('l.nombre_pages') %}
+                            <u class="purple">
+                                {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                            {% else %}
+                                {{ knp_pagination_sortable(books, ' Number of pages', 'l.nombre_pages') }}
+                            {% endif %}
+                        </th>
+                        <th> Link </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set i=1 %}
+                    {% for book in books %}
+                        <tr>
+                            <td> {{ (page-1)*20+i }} </td>
+                            <td> {{ book.titre }} </td>
+                            <td> {{ book.nombrePages }} </td>
+                            <td> <a href="{{ path('livre_show', {id:book.id}) }}" target="_blank"> <i class="icon linkify"></i> </a> </td>
+                        </tr>
+                        {% set i=i+1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if books|length>0 %}
+            <div class="ui segment sixteen attached column wide items" style="padding: 1em; border: 1px solid gray; text-align: center;">
+                {{ knp_pagination_render(books) }}
+            </div>
+        {% endif %}
 
-    <a href="{{ path('genre_index') }}">back to list</a>
 
-    <a href="{{ path('genre_edit', {'id': genre.id}) }}">edit</a>
 
-    {{ include('genre/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

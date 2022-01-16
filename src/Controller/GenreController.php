@@ -3,31 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\Genre;
+use App\Entity\Livre;
 use App\Form\GenreType;
 use App\Repository\GenreRepository;
+use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/genres")
- */
+
 class GenreController extends AbstractController
 {
     /**
-     * @Route("/", name="genre_index", methods={"GET"})
+     * @Route("/genres", name="genre_index", methods={"GET"})
      */
     public function index(GenreRepository $genreRepository): Response
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         return $this->render('genre/index.html.twig', [
             'genres' => $genreRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="genre_new", methods={"GET", "POST"})
+     * @Route("/cp/genres/new", name="genre_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -49,17 +52,30 @@ class GenreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="genre_show", methods={"GET"})
+     * @Route("/genres/{id}", name="genre_show", methods={"GET"})
      */
-    public function show(Genre $genre): Response
+    public function show( Genre $genre, PaginatorInterface $paginator, LivreRepository $livreRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $books = $paginator->paginate(
+            $livreRepository->createQueryBuilder('l')
+                ->leftJoin('l.genres', 'g')
+                ->where("g.id = :id")
+                ->setParameter('id', $genre->getId())->getQuery(),
+            $request->query->getInt('page', 1), /*page number*/
+            20 /*limit per page*/
+        );
+
         return $this->render('genre/show.html.twig', [
             'genre' => $genre,
+            'books' => $books,
+            'page' => $request->query->getInt('page', 1),
+            'order' => $request->get('order')
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="genre_edit", methods={"GET", "POST"})
+     * @Route("/cp/genres/{id}/edit", name="genre_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response
     {
@@ -79,10 +95,14 @@ class GenreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="genre_delete", methods={"POST"})
+     * @Route("/cp/genres/{id}", name="genre_delete", methods={"POST"})
      */
     public function delete(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response
     {
+        if( $genre->getLivres()->count()>0 ){
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer);
+        }
         if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->request->get('_token'))) {
             $entityManager->remove($genre);
             $entityManager->flush();

@@ -14,7 +14,7 @@
 
                 {% if is_granted('ROLE_ADMIN') %}
                     <div>
-                        <a href="{{ path('livre_edit', {'id': book.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> edit </a>
+                        <a href="{{ path('livre_edit', {'id': book.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> Edit </a>
                         {{ include('livre/_delete_form.html.twig') }}
                     </div>
                 {% endif %}
@@ -32,36 +32,38 @@
                         <h6 class="meta meta" style="align-self: start; padding-bottom: 0.9em; text-decoration: underline;"> <strong> TITLE : </strong> </h6>
                         <h1 class="ui header center aligned big " style="padding-bottom: 1.8em;">  {{ book.titre }} </h1>
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> PAGES : </strong> </h6>
-                        <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  {{ book.nombrePages }} Page </h3>
+                        <div style="padding: 0px 18px; width: 100%;" >
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> PAGES : </strong> </h6>
+                            <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  {{ book.nombrePages }} Page </h3>
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> PUBLISHING DATE : </strong> </h6>
-                        <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  {{ book.dateDeParution|date('d/m/Y') }}  </h3>
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> PUBLISHING DATE : </strong> </h6>
+                            <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  {{ book.dateDeParution|date('d/m/Y') }}  </h3>
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> RATING : </strong> </h6>
-                        <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  <strong> {{ book.note }}/20 </strong> </h3>
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> RATING : </strong> </h6>
+                            <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;">  <strong> {{ book.note }}/20 </strong> </h3>
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> ISBN13 CODE : </strong> </h6>
-                        <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;"> {{ book.isbn }} </h3>
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> ISBN13 CODE : </strong> </h6>
+                            <h3 class="ui header center aligned big " style="padding-bottom: 1.8em;"> {{ book.isbn }} </h3>
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> GENRES : </strong> </h6>
-                        {% set classnames = [ 'olive', 'grey', 'violet', 'purple', 'teal', 'blue', 'green', 'orange', 'brown', 'yellow', 'red'] %}
-                        <h5 class="ui header center aligned big " style="padding-bottom: 1.8em;">
-                            {% for genre in book.genres %}
-                                <a class="ui label {{ random(classnames) }}" href="{{ path('genre_show', {'id':genre.id}) }}" target="_blank"> {{ genre.nom }} </a>
-                            {% endfor %}
-                        </h5>
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> GENRES : </strong> </h6>
+                            {% set classnames = [ 'olive', 'grey', 'violet', 'purple', 'teal', 'blue', 'green', 'orange', 'brown', 'yellow', 'red'] %}
+                            <h5 class="ui header center aligned big " style="padding-bottom: 1.8em;">
+                                {% for genre in book.genres %}
+                                    <a class="ui label {{ random(classnames) }}" href="{{ path('genre_show', {'id':genre.id}) }}" target="_blank"> {{ genre.nom }} </a>
+                                {% endfor %}
+                            </h5>
 
 
-                        <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> AUTHORS : </strong> </h6>
-                        <h5 class="ui header center aligned big " style="padding-bottom: 1.8em;">
-                            {% for auteur in book.auteurs %}
-                                <a class="ui label" href="{{ path('auteur_show', { id: auteur.id}) }}" target="_blank" >
-                                    <img src="{{ auteur.image }}" class="ui right spaced avatar image">
-                                    {{ auteur.nomPrenom }}
-                                </a>
-                            {% endfor %}
-                        </h5>
+                            <h6 class="meta meta" style="align-self: start; padding-bottom: 0.6em; text-decoration: underline;"> <strong> AUTHORS : </strong> </h6>
+                            <h5 class="ui header center aligned big " style="padding-bottom: 1.8em;">
+                                {% for auteur in book.auteurs %}
+                                    <a class="ui label" href="{{ path('auteur_show', { id: auteur.id}) }}" target="_blank" >
+                                        <img src="{{ auteur.image }}" class="ui right spaced avatar image">
+                                        {{ auteur.nomPrenom }}
+                                    </a>
+                                {% endfor %}
+                            </h5>
+                        </div>
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="extra brown">
                                 Created in :  {{ book.createdAt|date('d/m/Y') }} , and editted last time in {{ book.updatedAt|date('d/m/Y') }}

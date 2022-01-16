@@ -116,6 +116,7 @@ class LivreController extends AbstractController
      */
     public function show(Livre $livre): Response
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         return $this->render('livre/show.html.twig', [
             'book' => $livre,
         ]);
