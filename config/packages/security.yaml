@@ -39,7 +39,6 @@ security:
 
     access_control:
         - { path: ^/cp, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:

@@ -17,6 +17,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuteurController extends AbstractController
 {
     /**
+     * @Route("/api", name="auteur_api", methods={"GET"})
+     */
+    public function apiSuggestions(AuteurRepository $auteurRepository, Request $request) : Response {
+        if( $this->getUser()==null )
+            return $this->json([]);
+        $value = trim($request->get('value'));
+        if( strlen($value)>0 )
+            $authors = $auteurRepository->createQueryBuilder('a')->where('a.nom_prenom LIKE :value')->setParameter('value', "%".$request->get('value')."%")->getQuery()->getResult() ;
+        else
+            $authors = [];
+        $cut = function( Auteur $author){
+            return ['nom_prenom'=>$author->getNomPrenom(), 'value'=> intval( $author->getId()), "image"=> $author->getImage()  ];
+        };
+        $authors = array_map( $cut, $authors );
+        return $this->json($authors);
+    }
+
+    /**
      * @Route("/", name="auteur_index", methods={"GET"})
      */
     public function index(AuteurRepository $auteurRepository): Response

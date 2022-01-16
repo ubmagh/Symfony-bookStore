@@ -1,0 +1,412 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} BookStore | Books {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("/css/tagify.css") }}">
+    <style>
+        .tagify {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+        }
+        /* Suggestions items */
+        .tagify__dropdown.users-list {
+            font-size: 14px;
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item {
+            padding: 0.5em 0.7em;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas: "avatar name" "avatar email";
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item:hover .tagify__dropdown__item__avatar-wrap {
+            transform: scale(1.2);
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item__avatar-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #eee;
+            transition: 0.1s ease-out;
+        }
+        .tagify__dropdown.users-list img {
+            width: 100%;
+            vertical-align: top;
+        }
+        .tagify__dropdown.users-list strong {
+            width: 100%;
+            align-self: center;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        .tagify__dropdown.users-list span {
+            width: 100%;
+            font-size: 0.9em;
+            opacity: 0.6;
+        }
+        .tagify__dropdown.users-list .addAll {
+            border-bottom: 1px solid #ddd;
+        }
+        /* Tags items */
+        .tagify__tag {
+            white-space: nowrap;
+        }
+        .tagify__tag:hover .tagify__tag__avatar-wrap {
+            transform: scale(1.6) translateX(-10%);
+        }
+        .tagify__tag .tagify__tag__avatar-wrap {
+            width: 16px;
+            height: 16px;
+            white-space: normal;
+            background: silver;
+            border-radius: 50%;
+            margin-right: 5px;
+            transition: 0.12s ease-out;
+        }
+        .tagify__tag img {
+            width: 100%;
+            vertical-align: top;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <div class="contentWrapper">
+
+        <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
+            <h2 class="ui header big black center aligned"> Search for a book : </h2>
+            <form method="get" class="ui form" action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))  }}" id="form" >
+                <input type="hidden" name="genresIds" id="genresIds" value="{{ genresIds|json_encode }}" >
+                <input type="hidden" name="authorsIds" id="authorsIds" value="{{ authorsIds|json_encode }}" >
+                <div class="ui grid centered">
+                    <div class="ten wide column middle aligned">
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field big fluid">
+                                <input type="text" name="search" value="{{ search }}" autocomplete="off" maxlength="50" placeholder="Book title or isbn">
+                            </div>
+                        </div>
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field big fluid">
+                                <input type="text" name="" id="authors"  value="{{ authors ? authors|json_encode:'' }}" autocomplete="off" class="hidden" placeholder="Choose authors">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six wide column">
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field small fluid labeled input">
+                                <div class="ui label">
+                                    <label for="sdate">
+                                        Publishing date from:
+                                    </label>
+                                </div>
+                                <input type="date" id="sdate" name="sdate" value="{{ sdate }}" placeholder="Publishing date from">
+                            </div>
+                        </div>
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field small fluid labeled input">
+                                <div class="ui label">
+                                    <label for="edate">
+                                        To :
+                                    </label>
+                                </div>
+                                <input type="date" id="edate" value="{{ edate }}" name="edate" placeholder="Publishing date to">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui row center-aligned">
+                    <div class="d-block customClass mx-auto" style="text-align:center;">
+                        <button type="submit" name="submitted" id="submit" disabled value="t" class="ui button teal" style="margin-right: 5px;">
+                            <i class="icon search "> </i> Search
+                        </button>
+                        {% if submitted %}
+                            <a href="{{ path('livre_index') }}" class="ui button negative" style="margin-left: 5px;">
+                                <i class="icon times"></i> cancel the search
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="ui grid centered top aligned">
+            <div class="column twelve wide">
+                <div style="padding: 0; margin: 0; background-color: #dadada;">
+                    <h3 class="ui top attached center aligned header small">
+                        Sort results
+                    </h3>
+                    <div class="ui segment sixteen attached column wide items" style="padding: 1em 1.5em;">
+                        <div class="ui grid four column centered" style="margin: 0; padding: 0;">
+                            <div class="column wide center aligned" style="padding: 0;">
+                                {% if books.isSorted('l.titre') %}
+                                    <u class="purple">
+                                        {{ knp_pagination_sortable(books, 'Title', 'l.titre') }}
+                                    </u>
+                                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                                {% else %}
+                                    {{ knp_pagination_sortable(books, 'Title', 'l.titre') }}
+                                {% endif %}
+                            </div>
+                            <div class="column wide center aligned" style="padding: 0;">
+                                {% if books.isSorted('l.nombre_pages') %}
+                                    <u class="purple">
+                                        {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
+                                    </u>
+                                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                                {% else %}
+                                    {{ knp_pagination_sortable(books, 'Number of pages', 'l.nombre_pages') }}
+                                {% endif %}
+                            </div>
+                            <div class="column wide center aligned" style="padding: 0;">
+                                {% if books.isSorted('l.note') %}
+                                    <u class="purple">
+                                        {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
+                                    </u>
+                                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                                {% else %}
+                                    {{ knp_pagination_sortable(books, 'Rating', 'l.note') }}
+                                {% endif %}
+                            </div>
+                            <div class="column wide center aligned" style="padding: 0;">
+                                {% if books.isSorted('l.date_de_parution') %}
+                                    <u class="purple">
+                                        {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
+                                    </u>
+                                    <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                                {% else %}
+                                    {{ knp_pagination_sortable(books, 'Publishing date', 'l.date_de_parution') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% set classnames = [ 'olive', 'grey', 'violet', 'purple', 'teal', 'blue', 'green', 'orange', 'brown', 'yellow', 'red'] %}
+                <div style="padding: 0; margin: 10px 0px;">
+                    <div class="ui segment sixteen attached column wide items " style="padding: 2em;">
+                        <div class="ui relaxed divided list items">
+                            {% for book in books %}
+                                <div class="item">
+                                    <div class="image">
+                                        <a href="{{ path('livre_show', {id:book.id}) }}">
+                                            <img src="{{ book.image }}" width="100%" />
+                                        </a>
+                                    </div>
+                                    <div class="content" style="display: flex;align-items: center;flex-direction: column;justify-content: center;" >
+                                        <h1 class="header"> <a href="{{ path('livre_show', {id:book.id}) }}">{{ book.titre }} </a> </h1>
+                                        <div class="meta" style="padding-top: 10px;">
+                                            <span> <strong> publishing date : </strong> {{ book.dateDeParution|date("d/m/Y") }}. </span>
+                                        </div>
+                                        <div class="description">
+                                            <p>
+                                                <strong> Genres : </strong>
+                                                {% for genre in book.genres %}
+                                                    <a class="ui label {{ random(classnames) }}" href="{{ path('genre_show', {'id':genre.id}) }}" target="_blank"> {{ genre.nom }} </a>
+                                                {% endfor %}
+                                            </p>
+                                            <div class="ui statistic customClass d-block" >
+                                                <div class="label brown">
+                                                    Rating
+                                                </div>
+                                                <div class="value">
+                                                    {{ book.note }} / 20
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="extra" style="padding-top: 16px;">
+                                            <strong> Authors :  </strong>
+                                            {% for auteur in book.auteurs %}
+                                                <a class="ui basic image label" href="{{ path('auteur_show', { id: auteur.id}) }}" target="_blank" >
+                                                    <img src="{{ auteur.image }}">
+                                                    {{ auteur.nomPrenom }}
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="ui icon message huge yellow" style="margin: 4em auto;">
+                                    <i class="times circle outline icon"></i>
+                                    <div class="content">
+                                        <div class="header">
+                                            Sorry, we couldn't find anything.
+                                        </div>
+                                        <p> Try using less and specific keywords. </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if books|length>0 %}
+                        <div class="ui segment sixteen attached column wide items" style="padding: 1em 1.5em; text-align:center;">
+                            {{ knp_pagination_render(books) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="column four wide" style="padding-left: 0;">
+                <h3 class="ui top attached center aligned header">
+                    Genres
+                </h3>
+                <div class="ui segment sixteen attached column wide items" style="padding: 1em 1.5em;">
+                    <div class="ui relaxed divided list">
+                        {% for genre in genres %}
+                            <div class="item">
+                                <div class="content" style="padding: 5px 2px; text-align: center;">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" class="genreField" value="{{ genre.id }}" {% if genre.id in genresIds %} checked {% endif %}>
+                                        <label> {{ genre.nom }} </label>
+                                    </div>
+                                    <a href="{{ path('genre_show', {'id':genre.id}) }}" target="_blank" style="display: inline-block;"> <i class="icon linkify"></i> </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block bodyScript %}
+    <script src="{{ asset("/js/tagify.min.js") }}"></script>
+    <script src="{{ asset("/js/tagify.polyfills.min.js") }}"></script>
+
+    <script>
+        {% if genresIds|length>0 %}
+            var genres= {{ genresIds|json_encode }} ;
+        {% else %}
+            var genres=[];
+        {% endif %}
+        {% if authorsIds|length>0 %}
+            var authorsIds= {{ authorsIds|json_encode }} ;
+        {% else %}
+            var authorsIds=[];
+        {% endif %}
+
+        $(function(){
+            $('#sdate').on('change', (e)=>{
+                $('#edate').attr('min', e.target.value);
+            });
+            $('#edate').on('change', (e)=>{
+                $('#sdate').attr('max', e.target.value);
+            });
+            $('.genreField').on('change', (e)=>{
+                let eInt = parseInt(e.target.value);
+                if( genres.length>5 )
+                    genres.shift();
+                if( genres.indexOf( eInt )!=-1 ){
+                    genres = genres.filter( val=>val!==eInt);
+                }else{
+                    genres.push(eInt);
+                }
+                $('#genresIds').val( '['+genres.toString()+']' );
+                console.log('eeeeh !');
+                $('#submit').click();
+            });
+            var input = document.querySelector('#authors'),
+                tagify = new Tagify(input, {
+                    whitelist:[],
+                    tagTextProp: "nom_prenom",
+                    maxTags: 6,
+                    addTagOnBlur: false,
+                    editTags: {
+                        keepInvalid: false,
+                    },
+                    pasteAsTags:false,
+                    editTags: false,
+                    dropdown : {
+                        searchKeys: ["nom_prenom"],
+                        position: "nom_prenom",
+                        mapValueTo: "nom_prenom",
+                        sortby: "nom_prenom",
+                        enabled: 1,
+                        classname: 'users-list'
+                    },
+                    callbacks: {
+                        add: ({ detail: { data }}) => {
+                            authorsIds.push(data.value);
+                            $('#authorsIds').val('['+authorsIds.toString()+']');
+                        },
+                        remove: ({ detail: { data }}) => {
+                            authorsIds = authorsIds.filter( e=> e!=parseInt(data.value) );
+                            $('#authorsIds').val('['+authorsIds.toString()+']');
+                        }
+                    },
+                    templates: {
+                        dropdownItemNoMatch: function (data) {
+                            return `<div class='${this.settings.classNames.dropdownItem}' tabindex="0" role="option">
+                                No suggestion found yet for: <strong>${data.value}</strong>
+                            </div>`
+                        },
+                        tag: tagTemplate,
+                        dropdownItem: suggestionItemTemplate
+                    }
+                }),
+                controller; // for aborting the call
+            // listen to any keystrokes which modify tagify's input
+            tagify.on('input', onInput)
+            function onInput( e ){
+                var value = e.detail.value
+                tagify.whitelist = null // reset the whitelist
+
+                // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+                controller && controller.abort()
+                controller = new AbortController()
+
+                // show loading animation and hide the suggestions dropdown
+                tagify.loading(true).dropdown.hide()
+
+                fetch('{{ path('auteur_api') }}?value=' + value, {signal:controller.signal})
+                    .then(RES => RES.json())
+                    .then(function(newWhitelist){
+                        tagify.whitelist = newWhitelist // update whitelist Array in-place
+                        tagify.loading(false).dropdown.show(value) // render the suggestions dropdown
+                    })
+            }
+            $('#authors').removeClass('hidden'); // after initialising tagify object
+            $('#submit').removeAttr('disabled');
+            $('#form').submit(function() {
+                $(this).children('#authors').remove();
+            });
+            function tagTemplate(tagData){
+                return `
+                    <tag title="${tagData.nom_prenom}"
+                            contenteditable='false'
+                            spellcheck='false'
+                            tabIndex="-1"
+                            class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                            ${this.getAttributes(tagData)}>
+                        <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                        <div>
+                            <div class='tagify__tag__avatar-wrap'>
+                                <img onerror="this.style.visibility='hidden'" src="${tagData.image}">
+                            </div>
+                            <span class='tagify__tag-text'>${tagData.nom_prenom}</span>
+                        </div>
+                    </tag>
+                `;
+            }
+            function suggestionItemTemplate(tagData){
+                return `
+                    <div ${this.getAttributes(tagData)}
+                        class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                        tabindex="0"
+                        role="option">
+                        ${ tagData.image ? `
+                        <div class="tagify__dropdown__item__avatar-wrap">
+                            <img onerror="this.style.visibility='hidden'" src="${tagData.image}">
+                        </div>` : ''
+                            }
+                        <strong>${tagData.nom_prenom}</strong>
+                    </div>
+                `;
+            }
+
+        })
+    </script>
+{% endblock %}

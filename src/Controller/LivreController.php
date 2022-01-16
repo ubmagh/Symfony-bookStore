@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Livre;
 use App\Form\LivreType;
+use App\Repository\AuteurRepository;
+use App\Repository\GenreRepository;
 use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +19,74 @@ class LivreController extends AbstractController
     /**
      * @Route("/books", name="livre_index", methods={"GET"})
      */
-    public function index(LivreRepository $livreRepository): Response
+    public function index(LivreRepository $livreRepository, GenreRepository $genreRepository, AuteurRepository $auteurRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findAll(),
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $search = trim($request->get('search'));
+        $edate = trim($request->get('edate'));
+        $sdate = trim($request->get('sdate'));
+
+        $authors = $request->get('authorsIds');
+        $genresIds = $request->get('genresIds');
+        $genresObject = json_decode($genresIds);
+        $authorsObject = json_decode( $authors );
+        $genres = $genreRepository->findAll();
+        $submitted = strlen($request->get('submitted'))>0;
+        $submitted &= strlen($search.$edate.$sdate)>0 && count($genresObject)>0 && count($authorsObject)>0;
+
+
+        if( !$this->dateIsValid($sdate) )
+            $sdate = null;
+        if( !$this->dateIsValid($edate) )
+            $edate = null;
+
+        if( is_array($genresObject) )
+            for( $i=0; $i<count($genresObject); $i++)
+                $genresObject[$i] = intval($genresObject[$i]);
+        else
+            $genresObject = [];
+
+        $authorsIDS = [];
+        if( is_array($authorsObject) )
+            for( $i=0; $i<count($authorsObject); $i++)
+                $authorsIDS[] = intval($authorsObject[$i]);
+        if( $submitted )
+            $booksQuery = $livreRepository->deepSearch( $search, $sdate, $edate, $genresObject, $authorsIDS) ;
+        else
+            $booksQuery =$livreRepository->findAllQuery();
+
+        $authorsAsTags  = [];
+        foreach( $authorsIDS as $id){
+            $author = $auteurRepository->find($id);
+            $authorsAsTags [] = (Object) [ "value"=>$author->getId()."", 'nom_prenom' =>$author->getNomPrenom(), 'image'=>$author->getImage() ];
+        }
+
+        $books = $paginator->paginate(
+            $booksQuery,
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
+        return $this->render('livre/usernavigation.html.twig', [
+            'books' => $books,
+            'genres' => $genres,
+            'search' => $search,
+            'submitted' => $submitted ,
+            'genresIds' => $genresObject,
+            'authors'=> $authorsAsTags,
+            'authorsIds'=> $authorsIDS,
+            'edate' => $edate,
+            'sdate' => $sdate,
+            'order'=> $request->get('order')
         ]);
+    }
+
+
+
+    private function dateIsValid($date, $format = 'Y-m-d')
+    {
+        $d =  \DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 
     /**
