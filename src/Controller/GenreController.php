@@ -41,8 +41,8 @@ class GenreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($genre);
             $entityManager->flush();
-
-            return $this->redirectToRoute('genre_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('created', 'true');
+            return $this->redirectToRoute('genre_show', ['id'=>$genre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('genre/new.html.twig', [
@@ -84,8 +84,8 @@ class GenreController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('genre_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('editted', 'true');
+            return $this->redirectToRoute('genre_show', [ 'id'=>$genre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('genre/edit.html.twig', [
@@ -104,10 +104,11 @@ class GenreController extends AbstractController
             return $this->redirect($referer);
         }
         if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->request->get('_token'))) {
+            $this->addFlash('deleted', $genre->getNom());
             $entityManager->remove($genre);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('genre_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('cp_genre_index', [ ], Response::HTTP_SEE_OTHER);
     }
 }

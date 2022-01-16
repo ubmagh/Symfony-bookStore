@@ -33,6 +33,20 @@
                                 Genre created in : {{ genre.createdAt|date('d/m/Y') }} , and editted last time in {{ genre.updatedAt|date('d/m/Y') }}
                             </div>
                         {% endif %}
+                        {% if app.flashes('editted')|length>0 %}
+                            <div class="ui positive message">
+                                <div class="header" style="text-align: center;">
+                                    Genre changes were successfuly saved
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if app.flashes('created')|length>0 %}
+                            <div class="ui positive message">
+                                <div class="header" style="text-align: center;">
+                                    Genre created successfuly
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=GenreRepository::class)
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"nom"}, message="This name exists already")
+ * @UniqueEntity(fields="nom", message="This name exists already")
  */
 class Genre
 {

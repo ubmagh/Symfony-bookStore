@@ -11,6 +11,14 @@
                 <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
             </h5>
             <h1 class="ui header center aligned customClass pt-0 brown huge"> Genres management </h1>
+            {% set flashes = app.flashes('deleted')  %}
+            {% if flashes %}
+                <div class="ui positive message">
+                    <div class="header" style="text-align: center;">
+                        Genre "{{ flashes|join(' ') }}" was successfuly deleted
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">

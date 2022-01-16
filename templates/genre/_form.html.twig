@@ -1,4 +1,18 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="ui form sixteen center aligned">
+        <div class="field">
+            <label for="nomField">
+                {{ form_label(form.nom) }}
+            </label>
+            {{ form_widget(form.nom, { 'attr':{'id':'nomField'} }) }}
+        </div>
+        {% if form.nom.vars.errors|length>0 %}
+            <div class="ui text left aligned myred">
+                {{ form_errors(form.nom) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <button class="ui button blue" type="submit" style="display: block; margin: 9px auto; width: fit-content;" > <i class="icon save"></i> {{ button_label|default('Create') }}</button>
 {{ form_end(form) }}
