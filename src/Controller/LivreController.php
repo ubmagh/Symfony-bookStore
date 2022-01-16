@@ -117,7 +117,7 @@ class LivreController extends AbstractController
     public function show(Livre $livre): Response
     {
         return $this->render('livre/show.html.twig', [
-            'livre' => $livre,
+            'book' => $livre,
         ]);
     }
 
