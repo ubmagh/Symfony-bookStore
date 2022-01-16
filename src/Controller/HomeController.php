@@ -39,7 +39,7 @@ class HomeController extends AbstractController
             $livres = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1), /*page number*/
-                10 /*limit per page*/
+                12 /*limit per page*/
             );
             $totalCount = $livres->getTotalItemCount();
         }else{
