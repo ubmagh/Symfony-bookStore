@@ -24,7 +24,7 @@ class GenreController extends AbstractController
     public function index(GenreRepository $genreRepository): Response
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-        return $this->render('genre/index.html.twig', [
+        return $this->render('genre/memberIndex.html.twig', [
             'genres' => $genreRepository->findAll(),
         ]);
     }

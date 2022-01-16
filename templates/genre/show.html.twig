@@ -79,6 +79,10 @@
                             <td> <a href="{{ path('livre_show', {id:book.id}) }}" target="_blank"> <i class="icon linkify"></i> </a> </td>
                         </tr>
                         {% set i=i+1 %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="ui orange"> no Book found for this genre </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
