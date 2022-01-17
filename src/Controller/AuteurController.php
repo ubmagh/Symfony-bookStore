@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Auteur;
 use App\Form\AuteurType;
 use App\Repository\AuteurRepository;
+use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -93,10 +94,22 @@ class AuteurController extends AbstractController
     /**
      * @Route("/{id}", name="auteur_show", methods={"GET"})
      */
-    public function show(Auteur $auteur): Response
+    public function show( Auteur $auteur, Request $request, PaginatorInterface $paginator, LivreRepository $livreRepository): Response
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $books = $paginator->paginate(
+            $livreRepository->createQueryBuilder('l')
+                ->leftJoin('l.auteurs', 'a')
+                ->where("a.id = :id")
+                ->setParameter('id', $auteur->getId())->getQuery(),
+            $request->query->getInt('page', 1), /*page number*/
+            20 /*limit per page*/
+        );
         return $this->render('auteur/show.html.twig', [
             'auteur' => $auteur,
+            'books' => $books,
+            'page' => $request->query->getInt('page', 1),
+            'order' => $request->get('order')
         ]);
     }
 
