@@ -104,8 +104,8 @@ class GenreController extends AbstractController
             return $this->redirect($referer);
         }
         if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->request->get('_token'))) {
-            $this->addFlash('deleted', $genre->getNom());
             $entityManager->remove($genre);
+            $this->addFlash('deleted', $genre->getNom());
             $entityManager->flush();
         }
 

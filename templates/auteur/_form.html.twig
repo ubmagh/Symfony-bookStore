@@ -1,4 +1,78 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="ui form sixteen center aligned" style="padding: 0em 4em;">
+        <div class="row">
+            <div class="field" style="padding: 1em;">
+                <label for="nom_prenom">
+                    {{ form_label(form.nom_prenom) }}
+                </label>
+                {{ form_widget(form.nom_prenom, { 'attr':{'id':'nom_prenom'} }) }}
+            </div>
+            {% if form.nom_prenom.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.nom_prenom) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="auteur_sexe">
+                    {{ form_label(form.sexe) }}
+                </label>
+                {{ form_widget(form.sexe) }}
+            </div>
+            {% if form.sexe.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.sexe) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="auteur_date_de_naissance">
+                    {{ form_label(form.date_de_naissance) }}
+                </label>
+                {{ form_widget(form.date_de_naissance) }}
+            </div>
+            {% if form.date_de_naissance.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.date_de_naissance) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="auteur_nationalite">
+                    {{ form_label(form.nationalite) }}
+                </label>
+                {{ form_widget(form.nationalite) }}
+            </div>
+            {% if form.nationalite.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.nationalite) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="auteur_image">
+                    {{ form_label(form.image) }}
+                </label>
+                {{ form_widget(form.image) }}
+            </div>
+            {% if form.image.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.image) }}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <button class="ui button blue" type="submit" style="display: block; margin: 9px auto; width: fit-content;" > <i class="icon save"></i> {{ button_label|default('Create') }}</button>
+
 {{ form_end(form) }}

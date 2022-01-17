@@ -1,11 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Auteur{% endblock %}
+{% block title %} BookStore | Create new Author {% endblock %}
 
 {% block body %}
-    <h1>Create new Auteur</h1>
+    <div class="contentWrapper" style="padding: 2em 1em;">
 
-    {{ include('auteur/_form.html.twig') }}
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("cp_auteur_index") }}"> <i class="icon left arrow" ></i> Go Back to Authors list  </a>
+                </h5>
+            </div>
+        </div>
 
-    <a href="{{ path('auteur_index') }}">back to list</a>
+
+        <div class="ui segment attached sixteen column wide items" style="padding: 1em; border: 1px solid gray;">
+            <h1 class="ui header center aligned big"> Create new Author </h1>
+        </div>
+        <div class="ui segment attached sixteen column wide items" style="padding: 4em 2em; border: 1px solid gray;">
+
+            {{ include('auteur/_form.html.twig') }}
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block bodyScript %}
+    <script>
+        $(()=>{
+            $('select.dropdown')
+                .dropdown()
+            ;
+        });
+    </script>
 {% endblock %}

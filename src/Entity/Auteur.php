@@ -36,7 +36,7 @@ class Auteur
      * @ORM\Column(type="string", length=1)
      * @Assert\NotNull(message="Set the sex")
      * @Assert\NotBlank(message="Set the sex")
-     * @Assert\Choice({"M", "F"}, message="Invalid sex")
+     * @Assert\Choice({"M", "F"}, message="Invalid sex value")
      */
     private $sexe;
 
@@ -62,6 +62,7 @@ class Auteur
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(message="Invalid image url")
      */
     private $image;
 

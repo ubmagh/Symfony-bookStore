@@ -11,6 +11,7 @@
                 </h5>
                 {% if is_granted('ROLE_ADMIN') %}
                     <div>
+                        <a href="{{ path('cp_genre_index') }}" class="ui button orange" style="display: inline-block; width: fit-content;" > <i class="list icon"></i>  list </a>
                         <a href="{{ path('genre_edit', {'id': genre.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> Edit </a>
                         {{ include('genre/_delete_form.html.twig') }}
                     </div>

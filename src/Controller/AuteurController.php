@@ -81,8 +81,8 @@ class AuteurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($auteur);
             $entityManager->flush();
-
-            return $this->redirectToRoute('auteur_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('created', 'true');
+            return $this->redirectToRoute('auteur_show', ['id'=>$auteur->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('auteur/new.html.twig', [
@@ -123,8 +123,8 @@ class AuteurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('auteur_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('editted', 'true');
+            return $this->redirectToRoute('auteur_show', ['id'=>$auteur->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('auteur/edit.html.twig', [
@@ -140,9 +140,10 @@ class AuteurController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$auteur->getId(), $request->request->get('_token'))) {
             $entityManager->remove($auteur);
+            $this->addFlash('deleted', $auteur->getNomPrenom());
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('auteur_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('cp_auteur_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -11,6 +11,14 @@
                 <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
             </h5>
             <h1 class="ui header center aligned customClass pt-0 orange huge"> Authors management </h1>
+            {% set flashes = app.flashes('deleted')  %}
+            {% if flashes %}
+                <div class="ui green message">
+                    <div class="header" style="text-align: center;">
+                        Author "{{ flashes|join(' ') }}" was successfuly deleted
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
@@ -93,7 +101,7 @@
                         <td>{{ auteur.nomPrenom }}</td>
                         <td> <i class="{{ gender==1 ? 'mars blue':'venus pink' }} icon"></i> {{ gender==1 ? 'Male':'Female' }}  </td>
                         <td>{{ auteur.dateDeNaissance ? auteur.dateDeNaissance|date('d/m/Y') : '' }}</td>
-                        <td> <i class="{{ auteur.nationalite|lower }} flag"> </i> {{ auteur.nationalite }}</td>
+                        <td> <i class="{{ auteur.nationalite|lower }} flag"> </i> {{ auteur.nationalite|country_name }}</td>
                         <td>
                             <a href="{{ path('auteur_show', {'id': auteur.id}) }}" title="view">
                                 <i class="icon eye teal"> </i>

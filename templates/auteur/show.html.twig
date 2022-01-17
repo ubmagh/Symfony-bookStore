@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BookStore | Auteur: {{ auteur.nomPrenom }}{% endblock %}
+{% block title %}BookStore | Author: {{ auteur.nomPrenom }}{% endblock %}
 
 
 {% block body %}
@@ -12,6 +12,7 @@
                 </h5>
                 {% if is_granted('ROLE_ADMIN') %}
                     <div>
+                        <a href="{{ path('cp_auteur_index') }}" class="ui button orange" style="display: inline-block; width: fit-content;" > <i class="list icon"></i>  list </a>
                         <a href="{{ path('auteur_edit', {'id': auteur.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> Edit </a>
                         {{ include('auteur/_delete_form.html.twig') }}
                     </div>
@@ -30,7 +31,7 @@
                         <div class="description">
                             <h3 class="ui header center aligned"> <strong style="text-decoration: underline; margin-right: 6px;" class="meta"> Sexe : </strong>  {{ auteur.sexe is same as ('M') ?'<span class="blue" > <i class="icon mars blue"></i> Male </span>':'<span class="pink"> <i class="pink icon venus"></i> Female </span>' }} </h3>
                             <h3 class="ui header center aligned"> <strong style="text-decoration: underline; margin-right: 6px;" class="meta"> Birth date : </strong> {{ auteur.dateDeNaissance|date('d/m/Y') }}  </h3>
-                            <h3 class="ui header center aligned"> <strong style="text-decoration: underline; margin-right: 6px;" class="meta"> Nationality : </strong> <i class="flag {{ auteur.nationalite }}"></i> {{ auteur.nationalite|country_name }}  </h3>
+                            <h3 class="ui header center aligned"> <strong style="text-decoration: underline; margin-right: 6px;" class="meta"> Nationality : </strong> <i class="flag {{ auteur.nationalite|lower }}"></i> {{ auteur.nationalite|country_name }}  </h3>
                             <h3 class="ui header center aligned"> <strong style="text-decoration: underline; margin-right: 6px;" class="meta"> Number of books : </strong>  {{ auteur.livres|length }}  </h3>
                         </div>
                         {% if is_granted('ROLE_ADMIN') %}
@@ -43,14 +44,14 @@
                         {% if app.flashes('editted')|length>0 %}
                             <div class="ui green message">
                                 <div class="header" style="text-align: center;">
-                                    auteur changes were successfuly saved
+                                    Author changes were successfuly saved
                                 </div>
                             </div>
                         {% endif %}
                         {% if app.flashes('created')|length>0 %}
                             <div class="ui green message">
                                 <div class="header" style="text-align: center;">
-                                    auteur created successfuly
+                                    Author created successfuly
                                 </div>
                             </div>
                         {% endif %}
@@ -102,7 +103,7 @@
                     {% set i=i+1 %}
                 {% else %}
                     <tr>
-                        <td colspan="4" class="ui orange"> no Book found for this auteur </td>
+                        <td colspan="4" class="ui orange"> no Book found for this author </td>
                     </tr>
                 {% endfor %}
                 </tbody>
