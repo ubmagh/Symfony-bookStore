@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -23,6 +24,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $output = new ConsoleOutput();
         $faker = Factory::create();
         $genres = [];
         $authors = [];
@@ -34,6 +36,7 @@ class AppFixtures extends Fixture
         $adminUser->setPassword($password)->setRoles(["ROLE_ADMIN"]);
         $manager->persist($adminUser);
         $manager->flush();
+        $output->writeln(" ✅ -> new admin User created !");
 
         for( $i=0; $i<$this->nbrGenres; $i++){
             $genre = new Genre();
@@ -42,7 +45,7 @@ class AppFixtures extends Fixture
             $genres [] = $genre;
         }
         $manager->flush();
-
+        $output->writeln(" ✅ -> $this->nbrGenres Genres have been inserted !");
 
         for( $i=0; $i<$this->nbrAuthors; $i++){
             $author = new Auteur();
@@ -50,17 +53,19 @@ class AppFixtures extends Fixture
             $gender = $sexe == 'M' ? 'male':'female';
             $author->setNomPrenom( $faker->name($gender) )->setNationalite( $faker->country() )
                 ->setDateDeNaissance( $faker->dateTimeBetween('-150 years', '-10 years') )
-                ->setSexe( $sexe )->setImage( $faker->imageUrl(300, 600, 'portrait') );
+                ->setSexe( $sexe )->setImage( $faker->imageUrl(300, 600, 'people') );
             $manager->persist($author);
             $authors [] = $author;
         }
         $manager->flush();
+        $output->writeln(" ✅ -> $this->nbrAuthors Authors have been inserted !");
+
 
         for( $i=0; $i<$this->nbrBooks; $i++){
             $book = new Livre();
             $isbn =  $faker->isbn13();
             $book->setTitre( $faker->sentence(6, true) )
-                ->setImage( $faker->imageUrl(500, 900, "book") )
+                ->setImage( $faker->imageUrl(500, 900, "abstract") )
                 ->setDateDeParution( $faker->dateTimeBetween('1900-01-01', '2021-12-12') )
                 ->setIsbn( $isbn )
                 ->setNote( $faker->numberBetween(0,20) )
@@ -76,6 +81,7 @@ class AppFixtures extends Fixture
             $books [] = $book;
         }
         $manager->flush();
+        $output->writeln(" ✅ -> $this->nbrBooks Books have been inserted !");
 
 
     }

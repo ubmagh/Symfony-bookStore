@@ -13,7 +13,7 @@
             <h1 class="ui header center aligned customClass pt-0 brown huge"> Genres management </h1>
             {% set flashes = app.flashes('deleted')  %}
             {% if flashes %}
-                <div class="ui positive message">
+                <div class="ui green message">
                     <div class="header" style="text-align: center;">
                         Genre "{{ flashes|join(' ') }}" was successfuly deleted
                     </div>

@@ -257,14 +257,25 @@
                                 <div class="content" style="padding: 5px 2px; text-align: center;">
                                     <div class="ui checkbox">
                                         <input type="checkbox" class="genreField" value="{{ genre.id }}" {% if genre.id in genresIds %} checked {% endif %}>
-                                        <label> {{ genre.nom }} </label>
+                                        <label> {{ genre.nom }} ( {{  genre.livresnbr }} ) </label>
                                     </div>
                                     <a href="{{ path('genre_show', {'id':genre.id}) }}" target="_blank" style="display: inline-block;"> <i class="icon linkify"></i> </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="item">
+                                <div class="content" style="padding: 5px 2px; text-align: center;">
+                                    <div class="message yellow">
+                                        No Genre Found
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
+                <h4 class="ui bottom attached center aligned header">
+                    <a href="{{ path('genre_index') }}" target="_blank" style="display: inline-block;"> <i class="icon info"></i> All genres </a>
+                </h4>
             </div>
         </div>
 

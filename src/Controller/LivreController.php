@@ -8,6 +8,7 @@ use App\Repository\AuteurRepository;
 use App\Repository\GenreRepository;
 use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,7 @@ class LivreController extends AbstractController
         $genresIds = $request->get('genresIds');
         $genresObject = json_decode($genresIds);
         $authorsObject = json_decode( $authors );
-        $genres = $genreRepository->findAll();
+        $genres = $genreRepository->createQueryBuilder('g')->select(['g.id', 'g.nom'])->addSelect("COUNT(l.id) as livresnbr ")->leftJoin('g.livres', 'l', Expr\Join::WITH, null)->groupBy('g.id')->orderBy('livresnbr', 'desc')->setMaxResults(14)->getQuery()->getResult();
         $submitted = strlen($request->get('submitted'))>0;
         $submitted &= strlen($search.$edate.$sdate)>0 && count($genresObject)>0 && count($authorsObject)>0;
 
