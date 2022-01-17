@@ -6,9 +6,11 @@ use App\Entity\Auteur;
 use App\Form\AuteurType;
 use App\Repository\AuteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,10 +39,32 @@ class AuteurController extends AbstractController
     /**
      * @Route("/", name="auteur_index", methods={"GET"})
      */
-    public function index(AuteurRepository $auteurRepository): Response
+    public function index(AuteurRepository $auteurRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('auteur/index.html.twig', [
+        $search = trim ( $request->get('search') );
+        $nationalityCode = trim ( $request->get('nationalityCode') );
+        $nationalityCode = $nationalityCode=="-"? "":$nationalityCode;
+        $submitted = trim ( $request->get('submitted') );
+
+        $query = $auteurRepository->fastSearch( strlen($search)>0? $search:null, strlen($nationalityCode)>0? $nationalityCode:null );
+
+        $authors = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), /*page number*/
+            16 /*limit per page*/
+        );
+
+        $countries = Countries::getCountryCodes();
+
+        return $this->render('auteur/userNavigation.html.twig', [
             'auteurs' => $auteurRepository->findAll(),
+            'search' => $search,
+            'nationalityCode' => $nationalityCode,
+            'submitted' => $submitted,
+            'authors' => $authors,
+            'countries' => $countries,
+            'order'=> $request->get('order'),
+            'totalCount' => $authors->getTotalItemCount()
         ]);
     }
 

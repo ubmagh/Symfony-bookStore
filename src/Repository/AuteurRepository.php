@@ -46,6 +46,21 @@ class AuteurRepository extends ServiceEntityRepository
         return $this->getEntityManager()->createQuery("SELECT a FROM App\Entity\Auteur a");
     }
 
+    public function fastSearch( $search, $countryCode):Query {
+        $query = $this->createQueryBuilder('a')->select("a")->addSelect(['a.id', 'a.nom_prenom', 'a.date_de_naissance', 'a.image', 'a.sexe', 'a.nationalite', 'COUNT(l.id) as nbrbooks'])
+                    ->leftJoin('a.livres', 'l', Query\Expr\Join::WITH, null)
+                    ->groupBy('a.id');
+        if( $search!=null ) {
+            $query->where('a.nom_prenom LIKE :keyword')->setParameter("keyword", "%" . $search . "%");
+            if( $countryCode!=null )
+                $query->andWhere(" a.nationalite LIKE :ccode")->setParameter("ccode", "%".$countryCode."%");
+        }elseif ($countryCode!=null){
+            $query->where(" a.nationalite LIKE :ccode")->setParameter("ccode", "%".$countryCode."%");
+        }
+
+        return $query->getQuery();
+    }
+
     // /**
     //  * @return Auteur[] Returns an array of Auteur objects
     //  */

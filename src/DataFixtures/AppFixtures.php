@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
             $author = new Auteur();
             $sexe = $faker->randomElement(['M','F']);
             $gender = $sexe == 'M' ? 'male':'female';
-            $author->setNomPrenom( $faker->name($gender) )->setNationalite( $faker->country() )
+            $author->setNomPrenom( $faker->name($gender) )->setNationalite( $faker->countryCode() )
                 ->setDateDeNaissance( $faker->dateTimeBetween('-150 years', '-10 years') )
                 ->setSexe( $sexe )->setImage( $faker->imageUrl(300, 600, 'people') );
             $manager->persist($author);

@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} BookStore | CP : Authors {% endblock %}
+
+{% block body %}
+    <div class="contentWrapper">
+
+        <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray;">
+            <h2 class="ui header big black center aligned"> Search for an author : </h2>
+            <form method="get" class="ui form" action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))  }}" id="form" >
+                <div class="ui grid centered">
+                    <div class="ten wide column middle aligned">
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field big fluid">
+                                <input type="text" name="search" value="{{ search }}" autocomplete="off" maxlength="50" placeholder="Author's name ...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six wide column">
+                        <div class="ui row pb-1 customClass">
+                            <div class="ui wide field small fluid labeled input">
+                                <div class="ui label">
+                                    <label for="nationalityCode">
+                                        Nationality
+                                    </label>
+                                </div>
+                                <select class="ui search dropdown" name="nationalityCode" id="nationalityCode">
+                                    <option value="-" style="background-color: lightgray;"> Select Country </option>
+                                    {% for country in countries %}
+                                        <option value="{{ country }}" {{ nationalityCode==country }} > <i class="flag {{ country|lower }}"></i> {{ country|country_name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui row center-aligned">
+                    <div class="d-block customClass mx-auto" style="text-align:center;">
+                        <button type="submit" name="submitted" id="submit" value="t" class="ui button teal" style="margin-right: 5px;">
+                            <i class="icon search "> </i> Search
+                        </button>
+                        {% if submitted %}
+                            <a href="{{ path('auteur_index') }}" class="ui button negative" style="margin-left: 5px;">
+                                <i class="icon times"></i> cancel the search
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% if authors|length>0 %}
+            <div class="ui segment column wide" style=" margin: 0.2em auto !important; padding: 0; border: 1px solid gray; background-color: #fffffdc7;">
+                <h4 class="ui header center aligned" style="margin-bottom: 15px; padding: 0;"> <u> <pre> {{ totalCount }} results found </pre> </u> </h4>
+                <hr>
+                <h5 class="ui header four column grid centered m-0">
+                    <div class="ui column center aligned">
+                        <strong> Sort by : </strong>
+                    </div>
+                    <div class="ui column center aligned">
+                        {% if authors.isSorted('nbrbooks') %}
+                            <u class="purple">
+                                {{ knp_pagination_sortable(authors, 'Number of books', 'nbrbooks') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                        {% else %}
+                            {{ knp_pagination_sortable(authors, 'Number of books', 'nbrbooks') }}
+                        {% endif %}
+                    </div>
+                    <div class="ui column center aligned">
+                        {% if authors.isSorted('a.date_de_naissance') %}
+                            <u class="purple">
+                                {{ knp_pagination_sortable(authors, 'Birth date', 'a.date_de_naissance') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                        {% else %}
+                            {{ knp_pagination_sortable(authors, 'Birth date', 'a.date_de_naissance') }}
+                        {% endif %}
+                    </div>
+                </h5>
+            </div>
+        {% endif %}
+
+        <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray;">
+            <div class="ui grid" style="padding: 2em;">
+                {% for author in authors %}
+                    <div class="four wide column" >
+                        <div class="ui card">
+                            <div class="image">
+                                <a href="{{ path('auteur_show', {id:author.id}) }}">
+                                    <img src="{{ author.image }}" width="100%" style="max-height: 350px" />
+                                </a>
+                            </div>
+                            <div class="content">
+                                <a href="{{ path('auteur_show', {id:author.id}) }}" class="header" style="text-align: center;">
+                                    {{ author.nom_prenom }}
+                                </a>
+                                <div class="meta" style="text-align: center;">
+                                    <span class="date"> <strong> Birth date : </strong> {{ author.date_de_naissance|date("d/m/Y") }}. </span>
+                                </div>
+                                <div class="description" style="padding-top: 1em;">
+                                    <div class="ui statistic violet customClass mx-auto d-block">
+                                        <div class="label">
+                                            number of books:
+                                        </div>
+                                        <div class="value">
+                                            <strong>{{ author.nbrbooks }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content center aligned">
+                                    <i class="flag {{ author.nationalite|lower }}"></i> {{ author.nationalite|country_name }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="ui icon message huge yellow" style="margin: 4em auto;">
+                        <i class="times circle outline icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Sorry, we couldn't find any author.
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if authors|length>0 %}
+            <div class="ui segment fourteen column wide center aligned" style=" margin-bottom: 2em !important; border: 1px solid gray; background-color: #fffffdc7;">
+                {{ knp_pagination_render(authors) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block bodyScript %}
+    <script>
+        $(()=>{
+            $('select.dropdown')
+                .dropdown()
+            ;
+        });
+    </script>
+{% endblock %}
