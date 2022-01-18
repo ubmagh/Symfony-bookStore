@@ -7,8 +7,10 @@ use App\Form\AuteurType;
 use App\Repository\AuteurRepository;
 use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
@@ -136,11 +138,21 @@ class AuteurController extends AbstractController
     /**
      * @Route("/{id}", name="auteur_delete", methods={"POST"})
      */
-    public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager, LivreRepository $livreRepository, AuteurRepository $auteurRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$auteur->getId(), $request->request->get('_token'))) {
             $entityManager->remove($auteur);
             $this->addFlash('deleted', $auteur->getNomPrenom());
+            $entityManager->flush();
+            // delete books with no authors
+            $booksWithAuthors = $livreRepository->createQueryBuilder('l')->select('l.id')->join('l.auteurs', 'a', Expr\Join::WITH, null)->distinct(true)->getQuery()->getScalarResult();
+            for( $i=0; $i<count($booksWithAuthors); $i++)
+                $booksWithAuthors[$i]= intval($booksWithAuthors[$i]['id']);
+            dump( $booksWithAuthors);
+            $booksWithNoWauthors = $livreRepository->createQueryBuilder('l')->select('l.id')->where(" l.id NOT IN (:arraOy) ")->setParameter("arraOy", $booksWithAuthors)->getQuery()->getResult();
+            dump( $booksWithNoWauthors);
+            foreach ( $booksWithNoWauthors as $book)
+                $entityManager->remove( $livreRepository->find($book) );
             $entityManager->flush();
         }
 

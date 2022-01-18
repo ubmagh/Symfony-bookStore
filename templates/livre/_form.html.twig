@@ -1,4 +1,95 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="ui form sixteen center aligned" style="padding: 0em 4em;">
+        <div class="row">
+            <div class="field" style="padding: 1em;">
+                <label for="livre_titre">
+                    {{ form_label(form.titre) }}
+                </label>
+                {{ form_widget(form.titre, { 'attr':{'id':'livre_titre'} }) }}
+            </div>
+            {% if form.titre.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.titre) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="livre_isbn">
+                    {{ form_label(form.isbn) }}
+                </label>
+                {{ form_widget(form.isbn) }}
+            </div>
+            {% if form.isbn.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.isbn) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="livre_nombre_pages">
+                    {{ form_label(form.nombre_pages) }}
+                </label>
+                {{ form_widget(form.nombre_pages) }}
+            </div>
+            {% if form.nombre_pages.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.nombre_pages) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="livre_dateDeParution">
+                    {{ form_label(form.dateDeParution) }}
+                </label>
+                {{ form_widget(form.dateDeParution) }}
+            </div>
+            {% if form.dateDeParution.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.dateDeParution) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
+            <div class="field">
+                <label for="livre_note">
+                    {{ form_label(form.note) }}
+                </label>
+                {{ form_widget(form.note) }}
+                <div>
+                    <p id="ratingValue" style="text-align: center; color: cornflowerblue; font-weight: 900; font-size: 1.2em;"> </p>
+                </div>
+            </div>
+            {% if form.note.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.note) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 0.9em;">
+            <div class="field">
+                <label for="livre_image">
+                    {{ form_label(form.image) }}
+                </label>
+                {{ form_widget(form.image) }}
+            </div>
+            {% if form.image.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.image) }}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <button class="ui button blue" type="submit" style="display: block; margin: 9px auto; width: fit-content;" > <i class="icon save"></i> {{ button_label|default('Create') }}</button>
+
 {{ form_end(form) }}

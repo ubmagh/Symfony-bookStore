@@ -1,13 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Livre{% endblock %}
+{% block title %} BookStore | Edit a Book {% endblock %}
 
 {% block body %}
-    <h1>Edit Livre</h1>
 
-    {{ include('livre/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="contentWrapper" style="padding: 2em 1em;">
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("cp_livre_index") }}"> <i class="icon left arrow" ></i> Go Back to books list  </a>
+                </h5>
+            </div>
+        </div>
 
-    <a href="{{ path('livre_index') }}">back to list</a>
+        <div class="ui segment attached sixteen column wide items" style="padding: 1em; border: 1px solid gray;">
+            <h1 class="ui header center aligned big"> Edit a Book </h1>
+        </div>
+        <div class="ui segment attached sixteen column wide items" style="padding: 4em 2em; border: 1px solid gray;">
 
-    {{ include('livre/_delete_form.html.twig') }}
+            {{ include('livre/_form.html.twig', {'button_label': 'Save'}) }}
+
+            <div style="margin-top: 1.9em; text-align: center; margin-left: auto; margin-right: auto;">
+                {{ include('livre/_delete_form.html.twig') }}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block bodyScript %}
+    <script>
+        $(()=>{
+            $('#ratingValue').html($('#livre_note').val()+" / 20");
+            $('#livre_note').on('change', (e)=>{
+                $('#ratingValue').html( $(e.target).val()+" / 20" )
+            })
+        })
+    </script>
 {% endblock %}

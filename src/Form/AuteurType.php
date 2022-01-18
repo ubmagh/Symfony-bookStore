@@ -18,11 +18,13 @@ class AuteurType extends AbstractType
     {
         $builder
             ->add('nom_prenom', TextType::class, [
+                'label'=> "Full name",
                 'attr'=>[
                     'maxlength'=>'100'
                 ]
             ])
             ->add('sexe', ChoiceType::class, [
+                'label' => "Sex",
                 'choices' => [
                     'Male' => 'M',
                     'Female' => 'F'
@@ -32,15 +34,18 @@ class AuteurType extends AbstractType
                 'attr' => ['class' => "ui radio checkbox"]
                 ])
             ->add('date_de_naissance', BirthdayType::class, [ // https://symfony.com/doc/current/reference/forms/types/birthday.html
+                'label' => "Birth date",
                 'years' => [500],
                 'widget' => 'single_text',
             ])
             ->add('nationalite', CountryType::class,[
+                'label' => "Nationality",
                 'attr'=>[
                     'class'=>'ui search dropdown'
                 ]
             ])
             ->add('image', UrlType::class,[
+                'label' => "Image",
                 'invalid_message'=>"Invalid image url ",
                 'attr'=>[
                     'class'=>'ui search dropdown'

@@ -34,6 +34,7 @@ class Livre
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\Length (max=150, maxMessage="Title length should be less than 150 character")
      */
     private $titre;
 

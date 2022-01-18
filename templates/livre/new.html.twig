@@ -1,11 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Livre{% endblock %}
+
+{% block title %} BookStore | Create a Book {% endblock %}
+
 
 {% block body %}
-    <h1>Create new Livre</h1>
+    <div class="contentWrapper" style="padding: 2em 1em;">
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("cp_livre_index") }}"> <i class="icon left arrow" ></i> Go Back to books list  </a>
+                </h5>
+            </div>
+        </div>
 
-    {{ include('livre/_form.html.twig') }}
+        <div class="ui segment attached sixteen column wide items" style="padding: 1em; border: 1px solid gray;">
+            <h1 class="ui header center aligned big"> Create a new Book </h1>
+        </div>
+        <div class="ui segment attached sixteen column wide items" style="padding: 4em 2em; border: 1px solid gray;">
 
-    <a href="{{ path('livre_index') }}">back to list</a>
+            {{ include('livre/_form.html.twig') }}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyScript %}
+    <script>
+        $(()=>{
+            $('#ratingValue').html($('#livre_note').val()+" / 20");
+            $('#livre_note').on('change', (e)=>{
+                $('#ratingValue').html( $(e.target).val()+" / 20" )
+            })
+        })
+    </script>
 {% endblock %}
