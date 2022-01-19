@@ -34,7 +34,7 @@ class LivreController extends AbstractController
         $authorsObject = json_decode( $authors );
         $genres = $genreRepository->createQueryBuilder('g')->select(['g.id', 'g.nom'])->addSelect("COUNT(l.id) as livresnbr ")->leftJoin('g.livres', 'l', Expr\Join::WITH, null)->groupBy('g.id')->orderBy('livresnbr', 'desc')->setMaxResults(14)->getQuery()->getResult();
         $submitted = strlen($request->get('submitted'))>0;
-        $submitted &= strlen($search.$edate.$sdate)>0 && count($genresObject)>0 && count($authorsObject)>0;
+        $submitted &= ( strlen($search.$edate.$sdate)>0 || count($genresObject)>0 || count($authorsObject)>0 || strlen($genresIds)>0 );
 
 
         if( !$this->dateIsValid($sdate) )
