@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,23 +94,51 @@ class LivreController extends AbstractController
     /**
      * @Route("/cp/books/new", name="livre_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, GenreRepository $genreRepository, AuteurRepository $auteurRepository): Response
     {
         $livre = new Livre();
         $form = $this->createForm(LivreType::class, $livre);
         $form->handleRequest($request);
+        /*
+        $authorsIds = $request->get('auteurs');
+        $genresIds = $request->get('genresIds');
 
+        $genresObject = [];
+        if( $genresIds ){
+            $genresIds = json_decode( $genresIds );
+            $genres = $genreRepository->createQueryBuilder('g')->where('g.id in (:ids)')->setParameter('ids', $genresIds)->getQuery()->getResult();
+            foreach ( $genres as $genre){
+                $genresObject [] = [ 'value' =>$genre->getId(), 'nom'=>$genre->getNom()];
+            }
+        }
+        else
+            $genresIds = [];
+
+        $authorsObject = [];
+        if( $authorsIds ){
+            $authorsIds = json_decode($authorsIds);
+            $authors = $auteurRepository->createQueryBuilder('a')->where(' a.id in (:ids)')->setParameter('ids', $authorsIds)->getQuery()->getResult();
+            foreach( $authors as $author)
+                $authorsObject [] = [ 'value'=>$author->getId(), 'nom_prenom'=>$author->getNomPrenom(), 'image'=>$author->getImage() ];
+        }else
+            $authorsIds = [];
+        */
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($livre);
             $entityManager->flush();
-
-            return $this->redirectToRoute('cp_livre_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('created', 'true');
+            return $this->redirectToRoute('livre_show', [ 'id'=>$livre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('livre/new.html.twig', [
             'livre' => $livre,
             'form' => $form,
-
+            /*
+            'authorsIds' => $authorsIds,
+            'authors' => $authorsObject,
+            'genresIds' => $genresIds,
+            'genres' => $genresObject
+            */
         ]);
     }
 
@@ -132,15 +161,23 @@ class LivreController extends AbstractController
         $form = $this->createForm(LivreType::class, $livre);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $this->addFlash('editted', 'true');
-            return $this->redirectToRoute('cp_livre_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('editted', 'true');
+            return $this->redirectToRoute('livre_show', [ 'id'=>$livre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('livre/edit.html.twig', [
             'book' => $livre,
             'form' => $form,
+            /*
+            'authorsIds' => [],
+            'authors' => [],
+            'genresIds' => [],
+            'genres' => []
+            */
         ]);
     }
 

@@ -2,6 +2,76 @@
 
 {% block title %} BookStore | Edit a Book {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("/css/tagify.css") }}">
+    <style>
+        .tagify {
+            width: 100%;
+            background: white;
+        }
+        /* Suggestions items */
+        .tagify__dropdown.users-list {
+            font-size: 14px;
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item {
+            padding: 0.5em 0.7em;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas: "avatar name" "avatar email";
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item:hover .tagify__dropdown__item__avatar-wrap {
+            transform: scale(1.2);
+        }
+        .tagify__dropdown.users-list .tagify__dropdown__item__avatar-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #eee;
+            transition: 0.1s ease-out;
+        }
+        .tagify__dropdown.users-list img {
+            width: 100%;
+            vertical-align: top;
+        }
+        .tagify__dropdown.users-list strong {
+            width: 100%;
+            align-self: center;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        .tagify__dropdown.users-list span {
+            width: 100%;
+            font-size: 0.9em;
+            opacity: 0.6;
+        }
+        .tagify__dropdown.users-list .addAll {
+            border-bottom: 1px solid #ddd;
+        }
+        /* Tags items */
+        .tagify__tag {
+            white-space: nowrap;
+        }
+        .tagify__tag:hover .tagify__tag__avatar-wrap {
+            transform: scale(1.6) translateX(-10%);
+        }
+        .tagify__tag .tagify__tag__avatar-wrap {
+            width: 16px;
+            height: 16px;
+            white-space: normal;
+            background: silver;
+            border-radius: 50%;
+            margin-right: 5px;
+            transition: 0.12s ease-out;
+        }
+        .tagify__tag img {
+            width: 100%;
+            vertical-align: top;
+        }
+    </style>
+{% endblock %}
+
+
 {% block body %}
 
     <div class="contentWrapper" style="padding: 2em 1em;">
@@ -27,16 +97,25 @@
         </div>
     </div>
 
+
 {% endblock %}
 
 
 {% block bodyScript %}
+    <script src="{{ asset("/js/tagify.min.js") }}"></script>
+    <script src="{{ asset("/js/tagify.polyfills.min.js") }}"></script>
     <script>
         $(()=>{
             $('#ratingValue').html($('#livre_note').val()+" / 20");
             $('#livre_note').on('change', (e)=>{
                 $('#ratingValue').html( $(e.target).val()+" / 20" )
             })
+            $('select.dropdown')
+                .dropdown()
+            ;
         })
     </script>
+    {#
+    {{  include('livre/genresNauthorsInput.html.twig') }}
+    #}
 {% endblock %}

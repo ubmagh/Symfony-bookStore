@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Auteur;
 use App\Entity\Genre;
 use App\Entity\Livre;
 use App\Form\GenreType;
+use App\Repository\AuteurRepository;
 use App\Repository\GenreRepository;
 use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +20,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GenreController extends AbstractController
 {
+
+    /**
+     * @Route("/api", name="genre_api", methods={"GET"})
+     */
+    public function apiSuggestions(GenreRepository $genreRepository, Request $request) : Response {
+        if( $this->getUser()==null )
+            return $this->json([]);
+        $value = trim($request->get('value'));
+        if( strlen($value)>0 )
+            $genres = $genreRepository->createQueryBuilder('g')->where('g.nom LIKE :value')->setParameter('value', "%".$request->get('value')."%")->getQuery()->getResult() ;
+        else
+            $genres = [];
+        $cut = function( Genre $genre){
+            return ['nom'=>$genre->getNom(), 'value'=> intval( $genre->getId())  ];
+        };
+        $genres = array_map( $cut, $genres );
+        return $this->json($genres);
+    }
+
     /**
      * @Route("/genres", name="genre_index", methods={"GET"})
      */

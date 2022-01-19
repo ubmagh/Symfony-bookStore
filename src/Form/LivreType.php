@@ -4,7 +4,9 @@ namespace App\Form;
 
 use App\Entity\Livre;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
@@ -36,7 +38,7 @@ class LivreType extends AbstractType
                     'maxlength'=>'17'
                 ]
             ])
-            ->add('dateDeParution', DateType::class, [
+            ->add('date_de_parution', BirthdayType::class, [
                 'label' => "Publishing date",
                 'widget' => 'single_text',
                 'years' => [500]
@@ -56,8 +58,8 @@ class LivreType extends AbstractType
                     'class'=>'ui search dropdown'
                 ]
             ])
-            //->add('auteurs')
-            //->add('genres')
+            ->add('auteurs') // manually created
+            ->add('genres') // manually created
         ;
     }
 

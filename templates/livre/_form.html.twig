@@ -45,14 +45,14 @@
 
         <div class="row" style="padding: 1em;  margin-top: 0.5em; ">
             <div class="field">
-                <label for="livre_dateDeParution">
-                    {{ form_label(form.dateDeParution) }}
+                <label for="livre_date_de_parution">
+                    {{ form_label(form.date_de_parution) }}
                 </label>
-                {{ form_widget(form.dateDeParution) }}
+                {{ form_widget(form.date_de_parution) }}
             </div>
-            {% if form.dateDeParution.vars.errors|length>0 %}
+            {% if form.date_de_parution.vars.errors|length>0 %}
                 <div class="ui text left aligned myred">
-                    {{ form_errors(form.dateDeParution) }}
+                    {{ form_errors(form.date_de_parution) }}
                 </div>
             {% endif %}
         </div>
@@ -87,6 +87,86 @@
                 </div>
             {% endif %}
         </div>
+
+        <div class="row" style="padding: 0.9em;">
+            <div class="field">
+                <label for="livre_image">
+                    {{ form_label(form.auteurs) }}
+                </label>
+                {{ form_widget(form.auteurs, { 'attr':{ 'class': 'ui dropdown'} }) }}
+            </div>
+            {% if form.auteurs.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.auteurs) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row" style="padding: 0.9em;">
+            <div class="field">
+                <label for="livre_image">
+                    {{ form_label(form.genres) }}
+                </label>
+                {{ form_widget(form.genres, { 'attr':{ 'class': 'ui dropdown'} }) }}
+            </div>
+            {% if form.genres.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.genres) }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        {#
+
+            # in Here, i wanted to create a tagify field, where the user types the name of the authors or genre, a Ajax request is launched to get suggestions list
+            # then the user can easly pick one of the list
+
+        <div class="row" style="padding: 0.9em;">
+            <div class="field">
+                <label for="authors">
+                    Authors
+                </label>
+                <div class="ui row pb-1 customClass">
+                    <input type="hidden" name="auteurs" id="authorsIds" value="{{ authorsIds|json_encode }}" >
+                    <div class="ui wide field big fluid">
+                        <input type="text" name="" id="authors"  value="{{ authors ? authors|json_encode:'' }}" autocomplete="off" class="hidden" placeholder="Choose authors">
+                    </div>
+                    {% if form.auteurs is defined %}
+                        {% if form.auteurs.vars.errors|length>0 %}
+                            <div class="ui text left aligned myred">
+                                {{ form_errors(form.auteurs) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding: 0.9em;">
+            <div class="field">
+                <label for="genres">
+                    Genres
+                </label>
+                <div class="ui row pb-1 customClass">
+                    <input type="hidden" name="genresIds" id="genresIds" value="{{ genresIds|json_encode }}" >
+                    <div class="ui wide field big fluid">
+                        <input type="text" name="" id="genres"  value="{{ genres ? genres|json_encode:'' }}" autocomplete="off" class="hidden" placeholder="Choose genres">
+                    </div>
+                    {% if form.genres is defined %}
+                        {% if form.genres.vars.errors|length>0 %}
+                            <div class="ui text left aligned myred">
+                                {{ form_errors(form.genres) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        #}
+
+
 
     </div>
 

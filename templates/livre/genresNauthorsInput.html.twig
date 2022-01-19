@@ -1,0 +1,156 @@
+<script>
+    {% if genresIds|length>0 %}
+        var genres= {{ genresIds|json_encode }} ;
+    {% else %}
+        var genres=[];
+    {% endif %}
+    {% if authorsIds|length>0 %}
+        var authors= {{ authorsIds|json_encode }} ;
+    {% else %}
+        var authors=[];
+    {% endif %}
+
+    $(function(){
+        var authorsInput = document.querySelector('#authors'),
+            genresInput= document.querySelector('#genres'),
+            authorsTagify, authorsController, genresTagify, genresController;
+        authorsTagify = new Tagify(authorsInput, {
+                whitelist:[],
+                tagTextProp: "nom_prenom",
+                addTagOnBlur: false,
+                editTags: {
+                    keepInvalid: false,
+                },
+                pasteAsTags:false,
+                editTags: false,
+                dropdown : {
+                    searchKeys: ["nom_prenom"],
+                    position: "nom_prenom",
+                    mapValueTo: "nom_prenom",
+                    sortby: "nom_prenom",
+                    enabled: 1,
+                    classname: 'users-list'
+                },
+                callbacks: {
+                    add: ({ detail: { data }}) => {
+                        authors.push(data.value);
+                        $('#authorsIds').val('['+authors.toString()+']');
+                    },
+                    remove: ({ detail: { data }}) => {
+                        authors = authors.filter( e=> e!=parseInt(data.value) );
+                        $('#authorsIds').val('['+authors.toString()+']');
+                    }
+                },
+                templates: {
+                    dropdownItemNoMatch: function (data) {
+                        return `<div class='${this.settings.classNames.dropdownItem}' tabindex="0" role="option">
+                                No suggestion found yet for: <strong>${data.value}</strong>
+                            </div>`
+                    },
+                    tag: tagTemplate,
+                    dropdownItem: suggestionItemTemplate
+                }
+            });
+
+        genresTagify = new Tagify( genresInput, {
+            whitelist:[],
+            tagTextProp: "nom",
+            addTagOnBlur: false,
+            editTags: {
+                keepInvalid: false,
+            },
+            pasteAsTags:false,
+            editTags: false,
+            dropdown : {
+                searchKeys: ["nom"],
+                position: "nom",
+                mapValueTo: "nom",
+                sortby: "nom",
+                enabled: 1,
+            },
+            callbacks: {
+                add: ({ detail: { data }}) => {
+                    genres.push(data.value);
+                    $('#genresIds').val('['+genres.toString()+']');
+                },
+                remove: ({ detail: { data }}) => {
+                    genres = genres.filter( e=> e!=parseInt(data.value) );
+                    $('#genresIds').val('['+genres.toString()+']');
+                }
+            },
+            templates: {
+                dropdownItemNoMatch: function (data) {
+                    return `<div class='${this.settings.classNames.dropdownItem}' tabindex="0" role="option">
+                                No suggestion found yet for: <strong>${data.value}</strong>
+                            </div>`
+                }
+            }
+        });
+
+        genresTagify.on('input', onGenresInput);
+        authorsTagify.on('input', onAuthorsInput);
+
+        function onGenresInput( e ){
+            var value = e.detail.value
+            genresTagify.whitelist = null
+            genresController && genresController.abort()
+            genresController = new AbortController()
+            genresTagify.loading(true).dropdown.hide()
+            fetch('{{ path('genre_api') }}?value=' + value, {signal:genresController.signal})
+                .then(RES => RES.json())
+                .then(function(newWhitelist){
+                    genresTagify.whitelist = newWhitelist // update whitelist Array in-place
+                    genresTagify.loading(false).dropdown.show(value) // render the suggestions dropdown
+                })
+        }
+
+        function onAuthorsInput( e ){
+            var value = e.detail.value
+            authorsTagify.whitelist = null
+            authorsController && authorsController.abort()
+            authorsController = new AbortController()
+            authorsTagify.loading(true).dropdown.hide()
+            fetch('{{ path('auteur_api') }}?value=' + value, {signal:authorsController.signal})
+                .then(RES => RES.json())
+                .then(function(newWhitelist){
+                    authorsTagify.whitelist = newWhitelist // update whitelist Array in-place
+                    authorsTagify.loading(false).dropdown.show(value) // render the suggestions dropdown
+                })
+        }
+
+        function tagTemplate(tagData){
+            return `
+                        <tag title="${tagData.nom_prenom}"
+                                contenteditable='false'
+                                spellcheck='false'
+                                tabIndex="-1"
+                                class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                                ${this.getAttributes(tagData)}>
+                            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                            <div>
+                                <div class='tagify__tag__avatar-wrap'>
+                                    <img onerror="this.style.visibility='hidden'" src="${tagData.image}">
+                                </div>
+                                <span class='tagify__tag-text'>${tagData.nom_prenom}</span>
+                            </div>
+                        </tag>
+                    `;
+        }
+
+        function suggestionItemTemplate(tagData){
+            return `
+                        <div ${this.getAttributes(tagData)}
+                            class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                            tabindex="0"
+                            role="option">
+                            ${ tagData.image ? `
+                            <div class="tagify__dropdown__item__avatar-wrap">
+                                <img onerror="this.style.visibility='hidden'" src="${tagData.image}">
+                            </div>` : ''
+            }
+                            <strong>${tagData.nom_prenom}</strong>
+                        </div>
+                    `;
+        }
+    });
+</script>

@@ -49,7 +49,6 @@ class Livre
      * @ORM\Column(type="date")*
      * @Assert\NotNull(message="Set publushing Date")
      * @Assert\NotBlank(message="Set publushing Date")
-     * @Assert\Date(message="Invalid Date")
      * @Assert\LessThan("today", message="Invalid Date")
      */
     private $date_de_parution;
@@ -67,7 +66,7 @@ class Livre
     private $note;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Auteur::class, mappedBy="livres")
+     * @ORM\ManyToMany(targetEntity=Auteur::class, inversedBy="livres")
      * @Assert\Count(min=1, minMessage="A book must be written by one author at least")
      */
     private $auteurs;

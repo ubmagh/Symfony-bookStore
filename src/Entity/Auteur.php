@@ -205,4 +205,8 @@ class Auteur
             $this->setCreatedAt(new \DateTime('now'));
         }
     }
+
+    public function __toString() :String {
+        return $this->getNomPrenom();
+    }
 }
