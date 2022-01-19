@@ -16,13 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/authors")
- */
+
 class AuteurController extends AbstractController
 {
     /**
-     * @Route("/api", name="auteur_api", methods={"GET"})
+     * @Route("/authors/api", name="auteur_api", methods={"GET"})
      */
     public function apiSuggestions(AuteurRepository $auteurRepository, Request $request) : Response {
         if( $this->getUser()==null )
@@ -40,10 +38,12 @@ class AuteurController extends AbstractController
     }
 
     /**
-     * @Route("/", name="auteur_index", methods={"GET"})
+     * @Route("/authors", name="auteur_index", methods={"GET"})
      */
     public function index(AuteurRepository $auteurRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+
         $search = trim ( $request->get('search') );
         $nationalityCode = trim ( $request->get('nationalityCode') );
         $nationalityCode = $nationalityCode=="-"? "":$nationalityCode;
@@ -72,7 +72,7 @@ class AuteurController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="auteur_new", methods={"GET", "POST"})
+     * @Route("/cp/authors/new", name="auteur_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -94,7 +94,7 @@ class AuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="auteur_show", methods={"GET"})
+     * @Route("/authors/{id}", name="auteur_show", methods={"GET"})
      */
     public function show( Auteur $auteur, Request $request, PaginatorInterface $paginator, LivreRepository $livreRepository): Response
     {
@@ -116,7 +116,7 @@ class AuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="auteur_edit", methods={"GET", "POST"})
+     * @Route("/cp/authors/{id}/edit", name="auteur_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
     {
@@ -136,7 +136,7 @@ class AuteurController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="auteur_delete", methods={"POST"})
+     * @Route("/cp/authors/{id}", name="auteur_delete", methods={"POST"})
      */
     public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager, LivreRepository $livreRepository, AuteurRepository $auteurRepository): Response
     {

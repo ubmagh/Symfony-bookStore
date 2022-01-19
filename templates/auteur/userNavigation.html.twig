@@ -27,7 +27,7 @@
                                 <select class="ui search dropdown" name="nationalityCode" id="nationalityCode">
                                     <option value="-" style="background-color: lightgray;"> Select Country </option>
                                     {% for country in countries %}
-                                        <option value="{{ country }}" {{ nationalityCode==country }} > <i class="flag {{ country|lower }}"></i> {{ country|country_name }} </option>
+                                        <option value="{{ country }}" {{ nationalityCode==country?"selected":"" }} > <i class="flag {{ country|lower }}"></i> {{ country|country_name }} </option>
                                     {% endfor %}
                                 </select>
                             </div>
