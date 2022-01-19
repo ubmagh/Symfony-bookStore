@@ -12,4 +12,4 @@ a simple symfony app to manage books, authors & genres.
 #
 #
 
->>>>> <center> Feel free to contribute ! </center>
+>> <center> Feel free to contribute !  </center>

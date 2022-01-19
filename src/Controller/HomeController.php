@@ -23,7 +23,7 @@ class HomeController extends AbstractController
         $edate = trim($request->get('edate'));
 
         $livres = null;
-        $submitted = false;
+        $submitted = trim($request->get('s'));;
         $nbrBooks = 0;
         $nbrAuthors = 0;
 
