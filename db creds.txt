@@ -1,0 +1,3 @@
+Database: mybooksstoredb
+Username: usermath
+Email: semikat731@dkb3.com
