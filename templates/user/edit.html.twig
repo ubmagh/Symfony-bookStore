@@ -1,13 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %} BookStore | edit User {% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+    <div class="contentWrapper" style="padding: 2em 1em;">
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("cp_user_index") }}"> <i class="icon left arrow" ></i> Go Back to users list  </a>
+                </h5>
+            </div>
+        </div>
+        <div class="ui segment attached sixteen column wide items" style="padding: 1em; border: 1px solid gray;">
+            <h1 class="ui header center aligned big"> Edit User </h1>
+        </div>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('user_index') }}">back to list</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+        <div class="ui segment attached sixteen column wide items" style="padding: 4em 2em; border: 1px solid gray;">
+            {{ include('user/_form.html.twig', {'button_label': 'Update', 'newUser': 0}) }}
+            <div style="margin-top: 1.9em; text-align: center; margin-left: auto; margin-right: auto;">
+                {{ include('user/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

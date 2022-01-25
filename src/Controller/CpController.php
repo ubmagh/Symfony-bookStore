@@ -121,20 +121,14 @@ class CpController extends AbstractController
     {
         $search = trim(  $request->get('search','') ) ;
         $page = $request->query->getInt('page', 1);
-        if( strlen( $search )>0 ){
-            $query = $userRepository->searchUsersLiteQuery($search);
-            $users = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1), /*page number*/
-                25 /*limit per page*/
-            );
-        } else{
-            $users = $paginator->paginate(
-                $userRepository->findAllQuery(),
-                $request->query->getInt('page', 1), /*page number*/
-                25 /*limit per page*/
-            );
-        }
+        if( strlen( $search )==0 )
+            $search= null;
+        $query = $userRepository->searchUsersLiteQuery($search);
+        $users = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), /*page number*/
+            25 /*limit per page*/
+        );
         return $this->render('user/index.html.twig', [
             'users' => $users,
             'search' => $search,

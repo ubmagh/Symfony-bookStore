@@ -1,30 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Genre{% endblock %}
+{% block title %} BookStore | User : {{ user.username }} {% endblock %}
 
 {% block body %}
-    <h1>Genre</h1>
+    <div class="contentWrapper" style="padding: 1em">
+        <div class="ui segment sixteen column wide items" style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <h5 class="ui header customClass pb-0 left aligned">
+                    <a href="{{ path("cp_user_index") }}"> <i class="icon left arrow" ></i> Go Back to users list  </a>
+                </h5>
+                {% if app.user.username is same as ("admin") %}
+                    <div>
+                        <a href="{{ path('user_edit',  {'id': user.id}) }}" class="ui button olive" style="display: inline-block; width: fit-content;" > <i class="edit icon"></i> Edit </a>
+                        {{ include('user/_delete_form.html.twig') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-        </tbody>
-    </table>
 
-    <a href="{{ path('user_index') }}">back to list</a>
+        <div class="ui segment sixteen column wide items " style="padding: 1em; border: 1px solid gray; background-color: #fffffdc7;">
+            <div>
+                {% if app.flashes('editted')|length>0 %}
+                    <div class="ui green message">
+                        <div class="header" style="text-align: center;">
+                            User changes were successfuly saved
+                        </div>
+                    </div>
+                {% endif %}
+                {% if app.flashes('created')|length>0 %}
+                    <div class="ui green message">
+                        <div class="header" style="text-align: center;">
+                            User created successfuly
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <table class="ui table customClass striped selectable">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>ID</strong>
+                        </td>
+                        <td>{{ user.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>username</strong>
+                        </td>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>email</strong>
+                        </td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>joined on</strong>
+                        </td>
+                        <td>{{ user.createdAt|date("d/m/Y") }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Last update on</strong>
+                        </td>
+                        <td>{{ user.updatedAt|date("d/m/Y") }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>User type</strong>
+                        </td>
+                        <td>{{ user.roles|length>1? 'admin user':'normal user'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
 
-    {{ include('user/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

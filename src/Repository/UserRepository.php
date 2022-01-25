@@ -61,12 +61,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function searchUsersLiteQuery($keyword) : Query
     {
+        if( $keyword==null )
+            return $this->getEntityManager()->createQuery("
+            SELECT u
+            FROM App\Entity\User u
+            WHERE u.username != 'admin'");
         return $this->getEntityManager()->createQuery("
             SELECT u
             FROM App\Entity\User u
-            WHERE u.username LIKE :keyword
+            WHERE u.username != 'admin'
+            AND ( u.username LIKE :keyword
             OR u.email LIKE :keyword
-            OR u.roles LIKE :keyword
+            OR u.roles LIKE :keyword )
             ")->setParameter('keyword', "%".$keyword."%");
     }
 

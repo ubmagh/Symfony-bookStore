@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -52,16 +53,18 @@ class UserEditType extends AbstractType
                     ]
                     ],
             ])
-            ->add('password', PasswordType::class,[
-                'mapped'=>false,
-                'constraints'=> [
-                    new UserPassword(['message'=>"Incorrect user password, try again !"]),
-                    new NotNull(['message'=>"Enter your current password to save changes."])
+            ->add("rolozos", ChoiceType::class, [
+                'label' => "Roles",
+                "mapped" => false,
+                'choices' => [
+                    'admin user' => 'admin',
+                    'normal user' => ''
                 ],
-                'attr'=>[
-                    'value'=>''
-                ]
-            ]);
+                'expanded' => false, // check out  this link for possible combinations :
+                'multiple' => false,  //              https://symfony.com/doc/current/reference/forms/types/choice.html#select-tag-checkboxes-or-radio-buttons
+                'attr' => ['class' => "ui radio checkbox"]
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

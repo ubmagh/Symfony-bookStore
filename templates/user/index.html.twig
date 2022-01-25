@@ -9,10 +9,9 @@
                 <a href="{{ path("cp_index") }}"> <i class="icon left arrow" ></i> Go Back to ControlPanel  </a>
             </h5>
             <h1 class="ui header center aligned customClass pt-0 olive huge"> Users management </h1>
-            <h1 class="ui header center aligned customClass pt-0  huge red "> !! Page not yet available !! </h1>
         </div>
 
-        {#
+
         <div class="ui segment sixteen  column wide items" style="padding: 1em 1.5em; border: 1px solid gray; background-color: #fffffdc7;">
             <div class="ui grid three column">
                 <div class="ui column left floated">
@@ -61,6 +60,16 @@
                         {% endif %}
                     </th>
                     <th>
+                        {% if users.isSorted('u.roles') %}
+                            <u class="purple">
+                                {{ knp_pagination_sortable(users, 'Type', 'u.roles') }}
+                            </u>
+                            <i class="icon {{ order is same as ('asc')? 'chevron up':'chevron down' }}" ></i>
+                        {% else %}
+                            {{ knp_pagination_sortable(users, 'Type', 'u.roles') }}
+                        {% endif %}
+                    </th>
+                    <th>
                         {% if users.isSorted('u.created_at') %}
                             <u class="purple">
                                 {{ knp_pagination_sortable(users, 'Joined in', 'u.created_at') }}
@@ -81,19 +90,22 @@
                         <td><strong> {{ (currentPage-1)*25+i }} </strong></td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
+                        <td> {{ user.roles|length>1 ? "admin user":"normal user" }} </td>
                         <td>{{ user.createdAt|date("d/m/Y") }}</td>
                         <td>
                             <a href="{{ path('user_show', {'id': user.id}) }}" title="view">
                                 <i class="icon eye teal"> </i>
                             </a>
+                            {% if app.user.username=="admin" %}
                             <a href="{{ path('user_edit', {'id': user.id}) }}" title="Edit">
                                 <i class="pencil alternate icon olive"></i>
                             </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="7">no records found</td>
+                        <td colspan="7">no users found</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -105,6 +117,6 @@
             </div>
         {% endif %}
     </div>
-    #}
+
 
 {% endblock %}

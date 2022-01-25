@@ -48,9 +48,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (array_search('ROLE_ADMIN', $user->getRoles()) !==false ){
-                $user->setUsername($oldUsername);
-            }
+            $user->setUsername($oldUsername);
             if( strlen( $form->get('plainPassword')->getData() ) >0 ) {
                 $userRepository->upgradePassword(
                     $user,

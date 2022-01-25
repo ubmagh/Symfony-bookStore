@@ -1,4 +1,87 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="ui form large grid container centered">
+
+            <div class="field fourteen wide row {% if  newUser==1 %} i {% else %} disabled  {% endif %}{{ form.username.vars.errors|length>0 and form.username.vars.submitted	 ? "error" }}">
+            {{ form_label(form.username, 'Username', {
+                'label_attr': {'style': 'margin-right: auto;'}
+            }) }}
+            <div class="ui corner labeled input fluid {% if  newUser==1 %} i {% else %} disabled  {% endif %}">
+                {{ form_widget(form.username ) }}
+                <div class="ui corner label red">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            {% if newUser==1 %}
+                <small class="meta" style="display: block; width: 100%;"> this username can't be changed later.</small>
+            {% else %}
+                <small class="meta" style="display: block; width: 100%;"> You can't change a user's username. </small>
+            {% endif %}
+            {% if form.username.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.username) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field fourteen wide row {{ form.email.vars.errors|length>0 and form.email.vars.submitted	 ? "error" }}">
+            {{ form_label(form.email, 'Email', {
+                'label_attr': {'style': 'margin-right: auto;'}
+            }) }}
+            <div class="ui corner labeled input fluid">
+                {{ form_widget(form.email) }}
+                <div class="ui corner label red">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            {% if form.email.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.email) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field fourteen wide row {{ form.plainPassword.first.vars.errors|length>0 and form.plainPassword.first.vars.submitted	 ? "error" }}">
+            {{ form_label(form.plainPassword.first, 'Password', {
+                'label_attr': {'style': 'margin-right: auto;'}
+            }) }}
+            <div class="ui input fluid">
+                {{ form_widget(form.plainPassword.first) }}
+            </div>
+            {% if form.plainPassword.first.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.plainPassword.first) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field fourteen wide row {{ form.plainPassword.second.vars.errors|length>0 and form.plainPassword.second.vars.submitted	 ? "error" }}" style="margin-bottom: 0;">
+            {{ form_label(form.plainPassword.second, 'Confirm password', {
+                'label_attr': {'style': 'margin-right: auto;'}
+            }) }}
+            <div class="ui input fluid">
+                {{ form_widget(form.plainPassword.second) }}
+            </div>
+            {% if form.plainPassword.second.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.plainPassword.second) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field fourteen wide row">
+            {{ form_label(form.rolozos, 'Roles', {
+                'label_attr': {'style': 'margin-right: auto;'}
+            }) }}
+            <div class="ui input fluid">
+               {{ form_widget(form.rolozos) }}
+            </div>
+            {% if form.rolozos.vars.errors|length>0 %}
+                <div class="ui text left aligned myred">
+                    {{ form_errors(form.rolozos) }}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+    <button class="ui submit teal button" style="display: block; margin: 9px auto; width: fit-content;"  type="submit"> <i class="save icon"></i> {{ button_label|default('Save') }} </button>
 {{ form_end(form) }}
