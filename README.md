@@ -3,7 +3,7 @@ a simple symfony app to manage books, authors & genres.
 
 # remainning features to add
 - support for two languages : french & english
-- user management in admin CP
+- ~~user management in admin CP~~
 
 #Stack
 - front : `SemanticUI` 'css framework', jQuery library
