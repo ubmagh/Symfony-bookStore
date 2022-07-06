@@ -1,21 +1,47 @@
-version: '3'
-
+version: "3.8"
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+  db:
+    image: mariadb:10.3
+    container_name: db
+    ports:
+      - 3306:3306
+    networks:
+      - app-db-network
     volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - ./bookstore.sql:/docker-entrypoint-initdb.d/bookstore.sql 
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_DATABASE: bookstore
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+  app:
+    container_name: app
+    image: scoma/symfonybookstore:latest
+    ports:
+      - 80:8000
+    depends_on:
+      - db
+    volumes:
+      - app-volume:/app
+    environment:
+      APP_ENV: prod
+      APP_SECRET: 3ee69a49ba88d5db0c8086072b6c6b08 # !
+      DATABASE_URL: "mysql://root:secret@db:3306/bookstore"
+
+    networks:
+      - app-db-network
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###
+  db-volume:
+    driver: local
+  app-volume:
+    driver: local
+
+networks:
+  app-db-network:
+    driver: bridge

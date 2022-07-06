@@ -1,6 +1,9 @@
 # Symfony Bookstore
 a simple symfony app to manage books, authors & genres.
 
+# Quick run : 
+
+* docker compose up on `docker-compose-yml` 🎈🐟
 
 # Stack
 - front : `SemanticUI` 'css framework', jQuery library
